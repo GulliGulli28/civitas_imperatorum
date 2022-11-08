@@ -5,6 +5,7 @@ class Character(ABC):
     health = None
     joy = None
     position = None
+    positionY = None
     direction = None
     sprite_list = None
     sprite_in_list = 0
