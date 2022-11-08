@@ -1,0 +1,12 @@
+liens utiles:
+
+lien du trello:
+https://trello.com/b/5WffGONS/projet-python
+
+apprendre la programmation orientée objet:
+https://openclassrooms.com/fr/courses/4302126-decouvrez-la-programmation-orientee-objet-avec-python
+
+bases de python:
+https://openclassrooms.com/fr/courses/7168871-apprenez-les-bases-du-langage-python
+
+
