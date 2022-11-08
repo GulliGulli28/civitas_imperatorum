@@ -4,22 +4,23 @@ from abc import ABC  # ABC = abstract base class
 class Character(ABC):
     health = None
     joy = None
-    position = None
+    positionX = None
     positionY = None
     direction = None
     sprite_list = None
     sprite_in_list = 0
 
-    def __init__(self, health, joy, position, direction,sprite_list, sprite_in_list):
+    def __init__(self, health, joy, positionX, positionY, direction,sprite_list, sprite_in_list):
         self.joy = joy
         self.health = health
-        self.position = position
+        self.positionX = positionX
+        self.positionY = positionY
         self.direction = direction
         self.sprite_list = sprite_list
         self.sprite_in_list = sprite_in_list
 
-    def move(self, newPosition):
-        self.position = newPosition
+    def move(self):
+        #self.position = newPosition
         if self.sprite_in_list == 11:
             self.sprite_in_list = 0
         else:
