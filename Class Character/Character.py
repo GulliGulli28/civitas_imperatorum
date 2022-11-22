@@ -1,5 +1,5 @@
 from abc import ABC  # ABC = abstract base class
-
+from ../Class\ Building
 
 class Character(ABC):
     health = None
@@ -19,7 +19,8 @@ class Character(ABC):
         self.sprite_list = sprite_list
         self.sprite_in_list = sprite_in_list
 
-    def move(self):
+    def move(self,mapBuilding map):
+
         #self.position = newPosition
         if self.sprite_in_list == 11:
             self.sprite_in_list = 0
