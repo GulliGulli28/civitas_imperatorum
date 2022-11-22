@@ -20,13 +20,12 @@ pygame.display.set_caption('Test Buttons')
 #load_game = pygame.image.load("load_game.png")
 
 
-class Image(pygame.sprite.Sprite):
+class Image():
 
     def __init__(self, path_without_extension: object, extension: object) -> object:
         self.path = path_without_extension
         self.extension = extension
         self.image = pygame.image.load(self.path + self.extension)
-        self.rect  = self.image.get_rect()
 
     def resize(self, height, width):
         image = cv2.imread(self.path + self.extension)
@@ -40,7 +39,7 @@ new_game = Image("new_game", ".png")
 load_game = Image("load_game", ".png")
 
 
-class Button():
+class Button(pygame.sprite.Sprite):
 
     def __init__(self, x, y, button, scale):
         width = button.image.get_width()
@@ -48,8 +47,7 @@ class Button():
         self.resized = pygame.transform.scale(button.image, (int(width * scale), int(height * scale)))
         self.x = x
         self.y = y
-        self.rect = button.rect
-
+        self.rect = pygame.Rect(x, y, width*scale, height*scale)
 
     def draw(self):
         # dessin du bouton sur l'écran
@@ -63,6 +61,8 @@ LG_button = Button(400, 400, load_game, 0.5)
 # Boucle de jeu
 running = True
 c = 0
+menuMode = False
+gameMode = False
 
 bg.resize(screen_height, screen_width)
 screen.blit(bg.image, (0, 0))
@@ -75,14 +75,26 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = 0
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            bg = Image("C3_sprites/C3/0_fired_00001", ".png")
-            bg.resize(screen_height, screen_width)
-            screen.blit(bg.image, (0, 0))
-            NG_button.draw()
-            LG_button.draw()
-            pygame.display.flip()
-
+        elif not menuMode:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                menuMode = True
+                bg = Image("C3_sprites/C3/0_fired_00001", ".png")
+                bg.resize(screen_height, screen_width)
+                screen.blit(bg.image, (0, 0))
+                NG_button.draw()
+                LG_button.draw()
+                pygame.display.flip()
+        elif  not gameMode:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # 1 = left_click
+                pos = pygame.mouse.get_pos()
+                if pygame.Rect.collidepoint(LG_button.rect,pos):
+                    print("Load game clicked")
+                    #faire Load game ici
+                if pygame.Rect.collidepoint(NG_button.rect,pos):
+                    #print("New game clicked")
+                    gameMode = True
+        elif gameMode:
+            print("now in game mode")
       # mise à jour de l'interface
 
 
