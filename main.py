@@ -20,12 +20,13 @@ pygame.display.set_caption('Test Buttons')
 #load_game = pygame.image.load("load_game.png")
 
 
-class Image():
+class Image(pygame.sprite.Sprite):
 
     def __init__(self, path_without_extension: object, extension: object) -> object:
         self.path = path_without_extension
         self.extension = extension
         self.image = pygame.image.load(self.path + self.extension)
+        self.rect  = self.image.get_rect()
 
     def resize(self, height, width):
         image = cv2.imread(self.path + self.extension)
@@ -47,6 +48,7 @@ class Button():
         self.resized = pygame.transform.scale(button.image, (int(width * scale), int(height * scale)))
         self.x = x
         self.y = y
+        self.rect = button.rect
 
 
     def draw(self):
