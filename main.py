@@ -1,4 +1,5 @@
 import pygame, cv2
+from interface import draw_background
 
 pygame.init()
 
@@ -94,7 +95,7 @@ while running:
                     #print("New game clicked")
                     gameMode = True
         elif gameMode:
-            print("now in game mode")
+            draw_background(screen,screen_width,screen_height)
       # mise à jour de l'interface
 
 
