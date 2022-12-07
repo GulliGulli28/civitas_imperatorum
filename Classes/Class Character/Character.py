@@ -1,5 +1,7 @@
 from abc import ABC  # ABC = abstract base class
+from random import randint
 
+from Classes.Class_Building import mapBuilding
 class Character(ABC):
     health = None
     joy = None
@@ -19,7 +21,7 @@ class Character(ABC):
         self.sprite_in_list = sprite_in_list
 
     def move(self,map):
-
+        #TODO faut-il pas plutôt mettre en paramètre "move(self,map.getPossibleDirection(self.positionX,self.positionY))" ???
         #self.position = newPosition
         if self.sprite_in_list == 11:
             self.sprite_in_list = 0
@@ -35,7 +37,7 @@ class Character(ABC):
         else:
             if self.direction not in map.nbr_direction:
                 self.direction = mapBuilding.nbr_direction(randint(len(mapBuilding.nbr_direction(self.positionX,self.positionY))))
-        positions(self)
+        positions(self)#TODO est-ce que c'est pas plutôt "direction(self)"
         
             
 
