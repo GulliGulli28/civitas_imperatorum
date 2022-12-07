@@ -3,9 +3,10 @@ import pygame, cv2
 pygame.init()
 
 # création fenêtre
-screen_height = 1080
-screen_width = 720
-screen = pygame.display.set_mode((screen_height, screen_width))
+screen_height = 1500
+screen_width = 800
+#screen = pygame.display.set_mode((screen_height, screen_width))
+screen = pygame.display.set_mode((0, 0),pygame.FULLSCREEN)
 pygame.display.set_caption('Test Buttons')
 
 # Redimensionnement images
@@ -16,9 +17,9 @@ pygame.display.set_caption('Test Buttons')
 
 # importation des images dans pygame
 #bg = pygame.image.load("main_image_r.jpg")
-#new_game = pygame.image.load("new_game.png")
-#load_game = pygame.image.load("load_game.png")
-
+new_game = pygame.image.load("Picture1.jpg")
+load_game = pygame.image.load("Picture2.png")
+save_game = pygame.image.load("Picture3.png")
 
 class Image():
 
@@ -26,6 +27,8 @@ class Image():
         self.path = path_without_extension
         self.extension = extension
         self.image = pygame.image.load(self.path + self.extension)
+
+        #self.rect=self.image.get_rect()
 
     def resize(self, height, width):
         image = cv2.imread(self.path + self.extension)
@@ -35,85 +38,134 @@ class Image():
 
 
 bg = Image("C3_sprites/C3/C3title_00001", ".png")
-new_game = Image("new_game", ".png")
-load_game = Image("load_game", ".png")
 
 
-class Button():
+#new_game = Image("new_game", ".png")
+#load_game = Image("load_game", ".png")
+
+#click_button = Image("click" ,".png" )
+#load_game.resize(400, 200)
+load_game=pygame.transform.scale(load_game,(300,50))
+load_game_rect=load_game.get_rect()
+new_game=pygame.transform.scale(new_game,(300,50))
+new_game_rect=new_game.get_rect()
+save_game=pygame.transform.scale(save_game,(300,50))
+save_game_rect=save_game.get_rect()
+
+"""class Button():
 
     def __init__(self, x, y, button, scale):
         width = button.image.get_width()
         height = button.image.get_height()
         self.resized = pygame.transform.scale(button.image, (int(width * scale), int(height * scale)))
+        self.rect = button.image.get_rect()
+        self.rect.topleft = (x,y)
         self.x = x
         self.y = y
+        self.clicked = False
 
+    def draw(self, surface):
+        action = False
+        #position de la souris
+        pos = pygame.mouse.get_pos()
+        #verifier les conditions du clicked
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False :
+                self.clicked = True
+                action = True
 
-    def draw(self):
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
         # dessin du bouton sur l'écran
-        screen.blit(self.resized, (self.x, self.y))
+        surface.blit(self.resized, (self.rect.x, self.rect.y))
+
+        return action """
+#initialiser la variable menu
+menu = False
+def bouton(panel, mouse):
+    if panel.x + 300 > mouse[0] > panel.x and panel.y + 50 > mouse[1] >panel.y:
+        return True
+    else:
+        return False
+
+
+def menu1():
+
+    global running
+    menu = True
+    screen.blit(load_game, (600, 500))
+    pygame.display.flip()
+    load_game_rect.x = 600
+    load_game_rect.y = 500
+    screen.blit(save_game, (600, 400))
+    pygame.display.flip()
+    save_game_rect.x = 600
+    save_game_rect.y = 400
+    screen.blit(new_game, (600, 300))
+    pygame.display.flip()
+    new_game_rect.x = 600
+    new_game_rect.y = 300
+
+    while menu:
+        for event1 in pygame.event.get():
+            if event1.type == pygame.QUIT:
+                menu = False
+                running = False
+                pygame.quit()
+                print("fermeture du jeu")
+            elif event1.type == pygame.MOUSEBUTTONDOWN:
+                mouse = pygame.mouse.get_pos()
+                if bouton(load_game_rect, mouse):
+                    menu = False
+                    running = False
+                    pygame.quit()
+                elif bouton(new_game_rect,mouse):
+                    bg = Image("test", ".png")
+                    bg.resize(screen_height, screen_width)
+                    screen.blit(bg.image, (0, 0))
+                    pygame.display.flip()
+
+
+
+
+
+
 
 
 # création des boutons
-NG_button = Button(400, 200, new_game, 0.5)
-LG_button = Button(400, 400, load_game, 0.5)
+#NG_button = Button(400, 200, new_game, 0.5)
+#LG_button = Button(400, 400, load_game, 0.5)
+#click = Button(1200,700,click_button,0.5)
 
 # Boucle de jeu
 running = True
-c = 0
+#c = 0
 
 bg.resize(screen_height, screen_width)
 screen.blit(bg.image, (0, 0))
+pygame.display.flip()
+#pygame.display.flip()
 while running:
-    bg.resize(screen_height, screen_width)
+    #bg.resize(screen_height, screen_width)
+    #screen.blit(bg.image, (0, 0))
     #if c==0:
         #screen.blit(bg.image, (0, 0))
         #c = 1
-    pygame.display.flip()
+   # pygame.display.flip()
     for event in pygame.event.get():
+        if menu == True :
+            menu1()
         if event.type == pygame.QUIT:
-            running = 0
-        elif event.type == pygame.MOUSEBUTTONDOWN:
+            running = False
+            pygame.quit()
+            print("fermeture du jeu")
+        elif event.type == pygame.MOUSEBUTTONDOWN :
             bg = Image("C3_sprites/C3/0_fired_00001", ".png")
             bg.resize(screen_height, screen_width)
             screen.blit(bg.image, (0, 0))
-            NG_button.draw()
-            LG_button.draw()
             pygame.display.flip()
+            menu = True
 
-      # mise à jour de l'interface
 
 
-#création des listes contenant les sprites des charactères
-liste_sprites_NE_resident=[]
-liste_sprites_SW_resident=[]
-liste_sprites_NW_resident=[]
-liste_sprites_SE_resident=[]
 
-liste_sprites_NE_walker=[]
-liste_sprites_SW_walker=[]
-liste_sprites_NW_walker=[]
-liste_sprites_SE_walker=[]
-
-liste_sprites_NE_worker=[]
-liste_sprites_SW_worker=[]
-liste_sprites_NW_worker=[]
-liste_sprites_SE_worker=[]
-
-for i in range(0,12):
-    liste_sprites_NE_resident.append("C3_sprites/C3/0_fired_00001"+"png")
-    liste_sprites_SW_resident.append("C3_sprites/C3/0_fired_00001"+"png")
-    liste_sprites_NW_resident.append("C3_sprites/C3/0_fired_00001"+"png")
-    liste_sprites_SE_resident.append("C3_sprites/C3/0_fired_00001"+"png")
-
-    liste_sprites_NE_walker.append("C3_sprites/C3/citizen02_00"+str(615+i*8)+".png")
-    liste_sprites_SW_walker.append("C3_sprites/C3/citizen02_00"+str(619+i*8)+".png")
-    liste_sprites_NW_walker.append("C3_sprites/C3/citizen02_00"+str(621+i*8)+".png")
-    liste_sprites_SE_walker.append("C3_sprites/C3/citizen02_00"+str(617+i*8)+".png")
-
-    liste_sprites_NE_worker.append("C3_sprites/C3/0_fired_00001"+"png")
-    liste_sprites_SW_worker.append("C3_sprites/C3/0_fired_00001"+"png")
-    liste_sprites_NW_worker.append("C3_sprites/C3/0_fired_00001"+"png")
-    liste_sprites_SE_worker.append("C3_sprites/C3/0_fired_00001"+"png")
-
-pygame.quit()
