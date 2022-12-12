@@ -1,4 +1,5 @@
 import pygame, cv2
+from interface import draw_background
 
 pygame.init()
 
@@ -53,6 +54,7 @@ save_game=pygame.transform.scale(save_game,(300,50))
 save_game_rect=save_game.get_rect()
 
 """class Button():
+class Button(pygame.sprite.Sprite):
 
     def __init__(self, x, y, button, scale):
         width = button.image.get_width()
@@ -73,6 +75,7 @@ save_game_rect=save_game.get_rect()
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False :
                 self.clicked = True
                 action = True
+        self.rect = pygame.Rect(x, y, width*scale, height*scale)
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
@@ -140,6 +143,9 @@ def menu1():
 # Boucle de jeu
 running = True
 #c = 0
+c = 0
+menuMode = False
+gameMode = False
 
 bg.resize(screen_height, screen_width)
 screen.blit(bg.image, (0, 0))
@@ -165,6 +171,28 @@ while running:
             screen.blit(bg.image, (0, 0))
             pygame.display.flip()
             menu = True
+            running = 0
+        elif not menuMode:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                menuMode = True
+                bg = Image("C3_sprites/C3/0_fired_00001", ".png")
+                bg.resize(screen_height, screen_width)
+                screen.blit(bg.image, (0, 0))
+                NG_button.draw()
+                LG_button.draw()
+                pygame.display.flip()
+        elif  not gameMode:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # 1 = left_click
+                pos = pygame.mouse.get_pos()
+                if pygame.Rect.collidepoint(LG_button.rect,pos):
+                    print("Load game clicked")
+                    #faire Load game ici
+                if pygame.Rect.collidepoint(NG_button.rect,pos):
+                    #print("New game clicked")
+                    gameMode = True
+        elif gameMode:
+            draw_background(screen,screen_width,screen_height)
+      # mise à jour de l'interface
 
 
 

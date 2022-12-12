@@ -67,3 +67,8 @@ class World:
         tree= pg.image.load("graphics/tree.png")
         rock=pg.image.load("graphics/rock.png")
         return {"block":block, "tree":tree, "rock": rock}
+
+
+    def create_batiment():
+        x,y = pygame.mouse.get_pos()
+        
