@@ -41,19 +41,6 @@ class Image():
 bg = Image("C3_sprites/C3/C3title_00001", ".png")
 
 
-#new_game = Image("new_game", ".png")
-#load_game = Image("load_game", ".png")
-
-#click_button = Image("click" ,".png" )
-#load_game.resize(400, 200)
-load_game=pygame.transform.scale(load_game,(300,50))
-load_game_rect=load_game.get_rect()
-new_game=pygame.transform.scale(new_game,(300,50))
-new_game_rect=new_game.get_rect()
-save_game=pygame.transform.scale(save_game,(300,50))
-save_game_rect=save_game.get_rect()
-
-"""class Button():
 class Button(pygame.sprite.Sprite):
 
     def __init__(self, x, y, button, scale):
@@ -64,17 +51,6 @@ class Button(pygame.sprite.Sprite):
         self.rect.topleft = (x,y)
         self.x = x
         self.y = y
-        self.clicked = False
-
-    def draw(self, surface):
-        action = False
-        #position de la souris
-        pos = pygame.mouse.get_pos()
-        #verifier les conditions du clicked
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False :
-                self.clicked = True
-                action = True
         self.rect = pygame.Rect(x, y, width*scale, height*scale)
 
         if pygame.mouse.get_pressed()[0] == 0:
@@ -82,7 +58,9 @@ class Button(pygame.sprite.Sprite):
         # dessin du bouton sur l'écran
         surface.blit(self.resized, (self.rect.x, self.rect.y))
 
-        return action """
+        return action 
+        
+
 #initialiser la variable menu
 menu = False
 def bouton(panel, mouse):
@@ -162,15 +140,6 @@ while running:
         if menu == True :
             menu1()
         if event.type == pygame.QUIT:
-            running = False
-            pygame.quit()
-            print("fermeture du jeu")
-        elif event.type == pygame.MOUSEBUTTONDOWN :
-            bg = Image("C3_sprites/C3/0_fired_00001", ".png")
-            bg.resize(screen_height, screen_width)
-            screen.blit(bg.image, (0, 0))
-            pygame.display.flip()
-            menu = True
             running = 0
         elif not menuMode:
             if event.type == pygame.MOUSEBUTTONDOWN:
