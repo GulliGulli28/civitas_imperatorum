@@ -66,6 +66,7 @@ class World:
         block= pg.image.load("PNG/mapp.png")
         tree= pg.image.load("graphics/tree.png")
         rock=pg.image.load("graphics/rock.png")
+
         return {"block":block, "tree":tree, "rock": rock}
 
 
