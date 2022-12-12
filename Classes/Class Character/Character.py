@@ -62,3 +62,4 @@ class Character(ABC):
             self.positionX+=1
 
 
+    
