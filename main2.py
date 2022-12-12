@@ -29,8 +29,7 @@ if __name__ == "__main__":
     main()
 
 
-Liste_Batiment = []
-Liste_Charactère =[]
+Dictionnaire_Batiment={}
 
 liste_sprites_NE_resident=[]
 liste_sprites_SW_resident=[]

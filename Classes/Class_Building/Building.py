@@ -1,6 +1,5 @@
 from abc import ABC  # ABC = abstract base class
 
-
 class Building(ABC):  # hérite de ABC
     condition = None
     positionX = None
