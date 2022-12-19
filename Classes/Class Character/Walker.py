@@ -32,7 +32,7 @@ class Walker(Character):
             self.move(self,self.travelHistory[len(self.travelHistory)])
             if len(self.travelHistory) != 0:#if the character is returned to his main building outOfRange=false
                 self.outOfRange = False
-        self.move(self,"""map.getPossibleDirection(self.positionX,self.positionY)""")
+        super.move(self,"""map.getPossibleDirection(self.positionX,self.positionY)""")
         if self.mainBuilding.getRange()<self.distanceToBuilding:#If the character is too far from his main building
             self.outOfRange = True
         self.updateDistanceToBuilding(self)
