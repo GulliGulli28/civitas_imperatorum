@@ -4,6 +4,8 @@ from  world import World
 from settings import TILE_SIZE
 
 
+
+
 class Game:
 
     def __init__(self, screen, clock):
@@ -16,11 +18,14 @@ class Game:
     def run(self):
         self.playing = True
         while self.playing:
-            self.clock.tick(60)
-            self.events()
-            self.update()
-            self.draw()
-
+            pg.mixer.music.load("Time_Time.mp3")
+            pg.mixer.music.play()
+            while pg.mixer.music.get_busy():
+                self.clock.tick(60)
+                self.events()
+                self.update()
+                self.draw()
+            
     def events(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -56,3 +61,4 @@ class Game:
 
 
         pg.display.flip()
+

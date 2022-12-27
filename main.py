@@ -1,8 +1,11 @@
-import pygame, cv2
+import pygame
 from interface import draw_background
 
 pygame.init()
+from Classes.Class_Building import Building
 
+bat= Building(10,20,(2,3),2,10,"coucou") 
+"""
 # création fenêtre
 screen_height = 1500
 screen_width = 800
@@ -162,6 +165,7 @@ while running:
         elif gameMode:
             draw_background(screen,screen_width,screen_height)
       # mise à jour de l'interface
+"""
 
 
 
