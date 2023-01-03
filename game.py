@@ -15,14 +15,6 @@ class Game:
         self.clock = clock
         self.width, self.height = self.screen.get_size()
 
-<<<<<<< HEAD
-        self.world = World(10, 10, self.width, self.height)
-
-        self.camera = Camera(self.width,self.height)
-
-        self.hud    = Hud(self.width,self.height)
-        
-=======
         # world
         self.world = World(30, 30, self.width, self.height)
 
@@ -31,7 +23,6 @@ class Game:
 
         # hud
         self.hud = Hud(self.width, self.height)
->>>>>>> 6b16752d5cd4fda7fbf80a987a201f93f259732e
 
     def run(self):
         self.playing = True
