@@ -14,17 +14,16 @@ class Game:
         self.width, self.height = self.screen.get_size()
 
         self.world = World(10, 10, self.width, self.height)
+        
 
     def run(self):
         self.playing = True
-        while self.playing:
-            pg.mixer.music.load("Time_Time.mp3")
-            pg.mixer.music.play()
-            while pg.mixer.music.get_busy():
-                self.clock.tick(60)
-                self.events()
-                self.update()
-                self.draw()
+        while self.playing:            
+            self.clock.tick(60)
+            self.events()
+            self.update()
+            self.draw()
+            self.music()
             
     def events(self):
         for event in pg.event.get():
@@ -61,4 +60,13 @@ class Game:
 
 
         pg.display.flip()
+
+        
+                
+    def music(self):
+            if pg.mixer.music.get_busy():
+                pass
+            else:
+                pg.mixer.music.load("Time_Time.mp3")
+                pg.mixer.music.play()
 
