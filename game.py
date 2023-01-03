@@ -1,8 +1,10 @@
 import pygame as pg
 import sys
-from  world import World
+from world import World
 from settings import TILE_SIZE
-
+from utils import draw_text
+from camera import Camera
+from hud import Hud
 
 
 
@@ -13,18 +15,23 @@ class Game:
         self.clock = clock
         self.width, self.height = self.screen.get_size()
 
-        self.world = World(10, 10, self.width, self.height)
+        # world
+        self.world = World(30, 30, self.width, self.height)
+
+        # camera
+        self.camera = Camera(self.width, self.height)
+
+        # hud
+        self.hud = Hud(self.width, self.height)
 
     def run(self):
         self.playing = True
-        while self.playing:
-            pg.mixer.music.load("Time_Time.mp3")
-            pg.mixer.music.play()
-            while pg.mixer.music.get_busy():
-                self.clock.tick(60)
-                self.events()
-                self.update()
-                self.draw()
+        while self.playing:            
+            self.clock.tick(60)
+            self.events()
+            self.update()
+            self.draw()
+            self.music()
             
     def events(self):
         for event in pg.event.get():
@@ -37,22 +44,41 @@ class Game:
                     sys.exit()
 
     def update(self):
-        pass
+        self.camera.update()
 
     def draw(self):
         self.screen.fill((0, 0, 0))
 
+        self.screen.blit(self.world.grass_tiles, (self.camera.scroll.x, self.camera.scroll.y))
+
         for x in range(self.world.grid_length_x):
             for y in range(self.world.grid_length_y):
 
-               # sq = self.world.world[x][y]["cart_rect"]
-                #rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE, TILE_SIZE)
-                #pg.draw.rect(self.screen, (0, 0, 255), rect, 1)
-                render_pos= self.world.world[x][y]["render_pos"]
-                self.screen.blit(self.world.tiles["block"],(render_pos[0] + self.width/2,render_pos[1] + self.height/4))
-                tile = self.world.world[x][y]["tile"]
-#                if tile !="":
+                # sq = self.world.world[x][y]["cart_rect"]
+                # rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE, TILE_SIZE)
+                # pg.draw.rect(self.screen, (0, 0, 255), rect, 1)
 
+                render_pos =  self.world.world[x][y]["render_pos"]
+                #self.screen.blit(self.world.tiles["block"], (render_pos[0] + self.width/2, render_pos[1] + self.height/4))
+
+                tile = self.world.world[x][y]["tile"]
+                if tile != "":
+                    self.screen.blit(self.world.tiles[tile],
+                                    (render_pos[0] + self.world.grass_tiles.get_width()/2 + self.camera.scroll.x,
+                                     render_pos[1] - (self.world.tiles[tile].get_height() - TILE_SIZE) + self.camera.scroll.y))
+
+                # p = self.world.world[x][y]["iso_poly"]
+                # p = [(x + self.width/2, y + self.height/4) for x, y in p]
+                # pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
+
+        self.hud.draw(self.screen)
+        draw_text(
+            self.screen,
+            'fps={}'.format(round(self.clock.get_fps())),
+            25,
+            (255, 255, 255),
+            (10, 10)
+        )
 
 
               #  p = self.world.world[x][y]["iso_poly"]
@@ -61,4 +87,13 @@ class Game:
 
 
         pg.display.flip()
+
+        
+                
+    def music(self):
+            if pg.mixer.music.get_busy():
+                pass
+            else:
+                pg.mixer.music.load("Time_Time.mp3")
+                pg.mixer.music.play()
 
