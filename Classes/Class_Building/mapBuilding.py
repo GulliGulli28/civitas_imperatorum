@@ -1,5 +1,6 @@
 import Building
 import Road
+import Pointeur
 
 
 class mapBuilding():
@@ -7,6 +8,7 @@ class mapBuilding():
         self.sizeX = 50
         self.sizeY = 50
         self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
+        self.graph = {}
 
     def add_build(self, newbuild):
         self.map[newbuild.positionX][newbuild.positionY] = Building
@@ -40,3 +42,41 @@ class mapBuilding():
         if isinstance(self.map[positionX - 1][positionY], Road):
             res.append("SW")
         return res
+
+    def update_graph(self, pos):
+        """
+        Method used to update the graph of the road with the intersection.
+
+        Args:
+            pos (int,int): Position of the road just added.
+
+        Returns:
+            graph the graph updated
+        """
+        if len(self.graph) < 1:
+            self.graph = {pos: {}}
+        else:
+            (x, y) = pos
+            direct = self.get_direction(self, x, y)
+            if len(direct) > 1:
+                for i in range(1, direct):
+                    distance = self.calcule_distance(pos, i)  # TODO résoudre ce mystère
+                    self.add_dist2graph(self, pos, distance)
+
+    def calcule_distance(self, pos, i):
+        distance = 0
+        stop = False
+        while stop == False:
+            old_pos = pos
+            pos += i
+            distance += 1
+            (x, y) = pos
+            if len(self.get_direction(x,y))==2:
+                #normal
+            elif len(self.get_direction(x,y))!=2:
+                #fin de route
+
+        return distance
+
+
+
