@@ -15,12 +15,23 @@ class Game:
         self.clock = clock
         self.width, self.height = self.screen.get_size()
 
+<<<<<<< HEAD
         self.world = World(10, 10, self.width, self.height)
 
         self.camera = Camera(self.width,self.height)
 
         self.hud    = Hud(self.width,self.height)
         
+=======
+        # world
+        self.world = World(30, 30, self.width, self.height)
+
+        # camera
+        self.camera = Camera(self.width, self.height)
+
+        # hud
+        self.hud = Hud(self.width, self.height)
+>>>>>>> 6b16752d5cd4fda7fbf80a987a201f93f259732e
 
     def run(self):
         self.playing = True
@@ -47,6 +58,8 @@ class Game:
     def draw(self):
         self.screen.fill((0, 0, 0))
 
+        self.screen.blit(self.world.grass_tiles, (self.camera.scroll.x, self.camera.scroll.y))
+
         for x in range(self.world.grid_length_x):
             for y in range(self.world.grid_length_y):
 
@@ -61,6 +74,27 @@ class Game:
                                     (render_pos[0] + self.world.grass_tiles.get_width()/2 + self.camera.scroll.x,
                                      render_pos[1] - (self.world.tiles[tile].get_height() - TILE_SIZE) + self.camera.scroll.y))
 
+                render_pos =  self.world.world[x][y]["render_pos"]
+                #self.screen.blit(self.world.tiles["block"], (render_pos[0] + self.width/2, render_pos[1] + self.height/4))
+
+                tile = self.world.world[x][y]["tile"]
+                if tile != "":
+                    self.screen.blit(self.world.tiles[tile],
+                                    (render_pos[0] + self.world.grass_tiles.get_width()/2 + self.camera.scroll.x,
+                                     render_pos[1] - (self.world.tiles[tile].get_height() - TILE_SIZE) + self.camera.scroll.y))
+
+                # p = self.world.world[x][y]["iso_poly"]
+                # p = [(x + self.width/2, y + self.height/4) for x, y in p]
+                # pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
+
+        self.hud.draw(self.screen)
+        draw_text(
+            self.screen,
+            'fps={}'.format(round(self.clock.get_fps())),
+            25,
+            (255, 255, 255),
+            (10, 10)
+        )
 
 
               #  p = self.world.world[x][y]["iso_poly"]
