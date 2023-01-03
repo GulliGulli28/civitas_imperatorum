@@ -11,7 +11,7 @@ def main():
     pg.mixer.init()
     screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
     clock = pg.time.Clock()
-    pg.mixer.music.load("Time_Time.mp3")
+    #pg.mixer.music.load("Time_Time.mp3")
     
 
     # implement menus

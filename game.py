@@ -64,9 +64,12 @@ class Game:
         
                 
     def music(self):
+        pass
+        '''
             if pg.mixer.music.get_busy():
                 pass
             else:
                 pg.mixer.music.load("Time_Time.mp3")
                 pg.mixer.music.play()
+        '''
 
