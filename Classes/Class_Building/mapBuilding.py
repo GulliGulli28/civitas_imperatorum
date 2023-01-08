@@ -1,8 +1,8 @@
-import Building
-import Road
-import Pointeur  # TODO
+from Classes.Class_Building.Building import Building
+from Classes.Class_Building.Road import Road
+#import Pointeur  # TODO
 from collections import deque
-
+import math
 
 class mapBuilding():
     def __init__(self):
@@ -11,16 +11,16 @@ class mapBuilding():
         self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
         self.graph = {}
 
-    def add_build(self, new_build):
-        self.map[new_build.positionX][new_build.positionY] = Building
-        if new_build.size > 1:
-            for i in range(new_build.size):
-                i += 1
-                p = Pointeur()
-                for y in range(i):
-                    self.map[new_build.positionX + i][new_build.positionY + y] = p
-                    self.map[new_build.positionX + y][new_build.positionY + i] = p
-                self.map[new_build.positionX + i][new_build.positionY + i] = p
+    # def add_build(self, new_build):
+    #     self.map[new_build.positionX][new_build.positionY] = Building
+    #     if new_build.size > 1:
+    #         for i in range(new_build.size):
+    #             i += 1
+    #             p = Pointeur()
+    #             for y in range(i):
+    #                 self.map[new_build.positionX + i][new_build.positionY + y] = p
+    #                 self.map[new_build.positionX + y][new_build.positionY + i] = p
+    #             self.map[new_build.positionX + i][new_build.positionY + i] = p
 
     def get_direction(self, positionX, positionY):  # TODO modifier pour retourner (x, y)
         """
@@ -139,3 +139,49 @@ class mapBuilding():
                 if voisin not in distance or new_distance < distance[voisin]:
                     distance[voisin] = new_distance
         return distance
+
+    def dijkstra(graph, start, end):
+        # Initialisation des distances
+        distances = {node: math.inf for node in graph}
+        distances[start] = 0
+
+        # Initialisation de la liste des noeuds à traiter
+        to_visit = set(graph)
+
+        # Initialisation de la liste des précédents
+        previous = {node: None for node in graph}
+
+        # Boucle principale
+        while to_visit:
+            # Recherche du noeud avec la distance minimale
+            current = min(to_visit, key=lambda x: distances[x])
+
+            # Si on a atteint la destination, on arrête la boucle
+            if current == end:
+                break
+
+            # Suppression du noeud courant de la liste des noeuds à traiter
+            to_visit.remove(current)
+
+            # Mise à jour des distances et des précédents des voisins
+            for neighbor in graph[current]:
+                distance = distances[current] + graph[current][neighbor]
+                if distance < distances[neighbor]:
+                    distances[neighbor] = distance
+                    previous[neighbor] = current
+
+        # Création du chemin en partant de la fin et en suivant les précédents
+        path = []
+        current = end
+        while current is not None:
+            path.append(current)
+            current = previous[current]
+
+        # Renvoie du chemin inversé (de la fin vers le début)
+        return list(reversed(path))
+
+    # graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
+    # start = 'A'
+    # end = 'D'
+    # path = dijkstra(graph, start, end)
+    # print(f'Le chemin le plus court entre {start} et {end} est {path}')

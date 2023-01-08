@@ -1,5 +1,7 @@
 from abc import ABC  # ABC = abstract base class
 import hashlib
+
+
 class Building(ABC):  # hérite de ABC
     condition = None
     positionX = None
@@ -10,17 +12,17 @@ class Building(ABC):  # hérite de ABC
     id = None
 
     def __init__(self, positionX, positionY, size, capacity, price, id):
-        self.condition = 0   # état du batiment (en feu, détruit)
+        self.condition = 0  # état du batiment (en feu, détruit)
         self.positionX = positionX  # position du la map axe x
         self.positionY = positionY  # position de la map axe y
         self.size = size  # taille du batiment (2x2, 3x3, ...)
         self.capacity = capacity  # nombre de personne pouvant rentrer dedans (travailler, habiter)
         self.price = price  # prix du batiment
-        self.id = id #id du batiment
+        self.id = id  # id du batiment
 
-        dictionnaire_building={}
+        dictionnaire_building = {}
         compteur = 0
-        type_building=""
+        type_building = ""
 
         """def creer_batiment(self):
             global compteur
@@ -40,14 +42,5 @@ class Building(ABC):  # hérite de ABC
             return dictionnaire_batiment"""
 
         def creer_batiment():
-            if type=="Farm":
-                p=type
-
-bat = Building(10,20,(2,3),2,10,"coucou")
-print(bat.positionX)
-a=str(type(bat))+"p"
-print(a)
-        
-
-
-
+            if type == "Farm":
+                p = type

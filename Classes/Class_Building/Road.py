@@ -1,4 +1,4 @@
-import Building
+from Classes.Class_Building.Building import Building
 
 
 class Road(Building):
