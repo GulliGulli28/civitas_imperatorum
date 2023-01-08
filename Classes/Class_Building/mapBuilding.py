@@ -1,6 +1,7 @@
 import Building
 import Road
-import Pointeur
+import Pointeur  # TODO
+from collections import deque
 
 
 class mapBuilding():
@@ -10,37 +11,41 @@ class mapBuilding():
         self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
         self.graph = {}
 
-    def add_build(self, newbuild):
-        self.map[newbuild.positionX][newbuild.positionY] = Building
-        if newbuild.size > 1:
-            for i in range(newbuild.size):
+    def add_build(self, new_build):
+        self.map[new_build.positionX][new_build.positionY] = Building
+        if new_build.size > 1:
+            for i in range(new_build.size):
                 i += 1
                 p = Pointeur()
                 for y in range(i):
-                    self.map[newbuild.positionX + i][newbuild.positionY + y] = p
-                    self.map[newbuild.positionX + y][newbuild.positionY + i] = p
-                self.map[newbuild.positionX + i][newbuild.positionY + i] = p
+                    self.map[new_build.positionX + i][new_build.positionY + y] = p
+                    self.map[new_build.positionX + y][new_build.positionY + i] = p
+                self.map[new_build.positionX + i][new_build.positionY + i] = p
 
     def get_direction(self, positionX, positionY):  # TODO modifier pour retourner (x, y)
         """
         Method used by a Character to get the possible future direction
+        W---N
+        |   |
+        S---E
 
-        Args:
-            positionX (int): Position on axis X of the Character.
-            positionY (int): Position on axis Y of the Character.
+        :param positionX: Position on axis X of the Character.
+        :type positionX: int
+        :param positionY: Position on axis Y of the Character.
+        :type positionY: int
 
         Returns:
             res list<direction>: list of the possible direction.
         """
         res = []
         if isinstance(self.map[positionX][positionY + 1], Road):
-            res.append("NW")
+            res.append((0, 1))  # NW
         if isinstance(self.map[positionX][positionY - 1], Road):
-            res.append("SE")
+            res.append((0, -1))  # SE
         if isinstance(self.map[positionX + 1][positionY], Road):
-            res.append("NE")
+            res.append((1, 0))  # NE
         if isinstance(self.map[positionX - 1][positionY], Road):
-            res.append("SW")
+            res.append((-1, 0))  # SW
         return res
 
     def update_graph(self, pos):
@@ -95,3 +100,42 @@ class mapBuilding():
         return pos2, distance
 
     def add_dist2graph(self, pos1, pos2, distance):
+        """
+        Method used to add the value to the graph in the key pos1 and pos2, if the key is not already in the graph
+        the key is added with his value.
+
+        :param pos1: Position 1 of the road just added.
+        :type pos1: (int,int)
+        :param pos2: Position 2 of the road just added.
+        :type pos2: (int,int)
+        :param distance: The distance between the 2 positions.
+        :type distance: int
+        """
+        if pos1 not in self.graph:
+            self.graph[pos1] = {}
+        if pos2 not in self.graph[pos1]:
+            self.graph[pos1][pos2] = distance
+        if pos2 not in self.graph:
+            self.graph[pos2] = {}
+        if pos1 not in self.graph[pos2]:
+            self.graph[pos2][pos1] = distance
+
+    def dijkstra(self, vertex):
+        """
+        Algorithm of dijkstra vertex is the point where we start
+
+        Take from :
+        https://128mots.com/2020/02/18/implementation-python-de-lalgorithme-de-dijkstra/
+        :param vertex: position where we start
+        :return: distance: dictionary of key = position and value = distance between the position and the vertex
+        """
+        queue = deque([vertex])
+        distance = {vertex: 0}
+        while queue:
+            t = queue.popleft()
+            for voisin in self.graph[t]:
+                queue.append(voisin)
+                new_distance = distance[t] + self.graph[t][voisin]
+                if voisin not in distance or new_distance < distance[voisin]:
+                    distance[voisin] = new_distance
+        return distance
