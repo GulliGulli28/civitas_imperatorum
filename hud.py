@@ -62,14 +62,14 @@ class Hud:
         tree = pg.image.load("graphics/tree.png").convert_alpha()
         rock = pg.image.load("graphics/rock.png").convert_alpha()
         road = pg.image.load("graphics/paneling/road.png").convert_alpha()
-        build_housing = pg.image.load("graphics/paneling/build_housing.png")
-        water_structures = pg.image.load("graphics/paneling/water_structures.png")
-        right_hud = pg.image.load("graphics/paneling/right_hud.png")
-        clear = pg.image.load("graphics/paneling/clear.png")
-        government_structures = pg.image.load("graphics/paneling/government_structures.png")
-        security_structures = pg.image.load("graphics/paneling/security_structures.png")
-        icon_1 = pg.image.load("graphics/paneling/paneling_00020.png")
-        overlays_case = pg.image.load("graphics/paneling/overlays_case.png")
+        build_housing = pg.image.load("graphics/paneling/build_housing.png").convert_alpha()
+        water_structures = pg.image.load("graphics/paneling/water_structures.png").convert_alpha()
+        right_hud = pg.image.load("graphics/paneling/right_hud.png").convert_alpha()
+        clear = pg.image.load("graphics/paneling/clear.png").convert_alpha()
+        government_structures = pg.image.load("graphics/paneling/government_structures.png").convert_alpha()
+        security_structures = pg.image.load("graphics/paneling/security_structures.png").convert_alpha()
+        icon_1 = pg.image.load("graphics/paneling/paneling_00020.png").convert_alpha()
+        overlays_case = pg.image.load("graphics/paneling/overlays_case.png").convert_alpha()
 
         images = {
             "block": block, "tree": tree, "rock": rock,

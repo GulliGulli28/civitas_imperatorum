@@ -16,7 +16,7 @@ class Game:
         self.width, self.height = self.screen.get_size()
 
         # world
-        self.world = World(30, 30, self.width, self.height)
+        self.world = World(10,10 , self.width, self.height)
 
         # camera
         self.camera = Camera(self.width, self.height)
@@ -59,13 +59,6 @@ class Game:
                 #pg.draw.rect(self.screen, (0, 0, 255), rect, 1)
                 render_pos= self.world.world[x][y]["render_pos"]
                 self.screen.blit(self.world.tiles["block"],(render_pos[0] + self.width/2,render_pos[1] + self.height/4))
-                tile = self.world.world[x][y]["tile"]
-                if tile != "":
-                    self.screen.blit(self.world.tiles[tile],
-                                    (render_pos[0] + self.world.grass_tiles.get_width()/2 + self.camera.scroll.x,
-                                     render_pos[1] - (self.world.tiles[tile].get_height() - TILE_SIZE) + self.camera.scroll.y))
-
-                render_pos =  self.world.world[x][y]["render_pos"]
                 #self.screen.blit(self.world.tiles["block"], (render_pos[0] + self.width/2, render_pos[1] + self.height/4))
 
                 tile = self.world.world[x][y]["tile"]

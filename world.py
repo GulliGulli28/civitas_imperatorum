@@ -87,4 +87,3 @@ class World:
 
     def create_batiment():
         x,y = pygame.mouse.get_pos()
-        
