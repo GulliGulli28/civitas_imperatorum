@@ -45,6 +45,7 @@ class Game:
 
     def update(self):
         self.camera.update()
+        self.hud.update()
 
     def draw(self):
         self.screen.fill((0, 0, 0))
@@ -84,14 +85,7 @@ class Game:
               #  p = self.world.world[x][y]["iso_poly"]
                # p = [(x + self.width/2, y + self.height/4) for x, y in p]
                 #pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
-        self.hud.draw(self.screen)
-        draw_text(
-            self.screen,
-            'fps={}'.format(round(self.clock.get_fps())),
-            25,
-            (255, 255, 255),
-            (10, 10)
-        )
+           
 
         pg.display.flip()
 
