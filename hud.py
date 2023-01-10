@@ -12,14 +12,17 @@ class Hud:
 
         # resources hud
         self.resources_surface = pg.Surface((width, height * 0.02), pg.SRCALPHA)
+        self.resources_rect = self.resources_surface.get_rect(topleft=(0, 0))
         self.resources_surface.fill(self.hud_colour)
 
         # right hud
         self.build_surface = pg.Surface((width * 0.106, height))
+        self.build_rect = self.build_surface.get_rect(topleft=(self.width * 0.84, self.height * 0.74))
         self.build_surface.fill(self.hud_colour)
 
         # select hud
         self.select_surface = pg.Surface((width * 0.3, height * 0.2), pg.SRCALPHA)
+        self.select_rect = self.select_surface.get_rect(topleft=(self.width * 0.35, self.height * 0.79))
         self.select_surface.fill(self.hud_colour)
 
 
@@ -49,10 +52,7 @@ class Hud:
         #affichage icons
         for tile in self.tiles:
             screen.blit(tile["icon"],tile["rect"].topleft)
-
-        if self.selected_tile is not None:
-            screen.blit(self.selected_tile["image"],pg.mouse.get_pos())
-
+            
         # OVERLAY TEXT
         font = pg.font.Font(None, 34)
         overlays_text = font.render("Overlays", True, (0, 0, 0))
