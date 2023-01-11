@@ -71,6 +71,14 @@ class Hud:
         icon_1 = pg.image.load("graphics/paneling/paneling_00020.png")
         overlays_case = pg.image.load("graphics/paneling/overlays_case.png")
 
+
+        build_housing_rect = build_housing.get_rect()
+        water_structures_rect = water_structures.get_rect()
+
+        clear_rect = clear.get_rect()
+        government_structures_rect = government_structures.get_rect()
+        security_structures_rect =  security_structures.get_rect()
+        overlays_case_rect = overlays_case.get_rect()
         images = {
             "block": block, "tree": tree, "rock": rock,
             "road": road, "build_housing": build_housing,
