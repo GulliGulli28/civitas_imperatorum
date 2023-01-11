@@ -146,7 +146,7 @@ class World:
         return x,y
 
     def load_images(self):
-        block= pg.image.load("PNG/mapp.png")
+        land= pg.image.load("graphics/land.png")
         tree= pg.image.load("graphics/tree.png")
         rock=pg.image.load("graphics/rock.png")
 
@@ -156,7 +156,7 @@ class World:
         governments = pg.image.load("graphics/government.png").convert_alpha()
         security = pg.image.load("graphics/security.png").convert_alpha()
 
-        return {"block":block, "tree":tree, "rock": rock,
+        return {"block":land, "tree":tree, "rock": rock,
             "road": road,
             "housing" : housing,
             "water" : water,
