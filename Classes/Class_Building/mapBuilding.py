@@ -1,8 +1,11 @@
+import random
+
 from Classes.Class_Building.Building import Building
 from Classes.Class_Building.Road import Road
-#import Pointeur  # TODO
+from Classes.Class_Building.Pointeur import Pointeur
 from collections import deque
 import math
+
 
 class mapBuilding():
     def __init__(self):
@@ -10,17 +13,22 @@ class mapBuilding():
         self.sizeY = 50
         self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
         self.graph = {}
+        self.graph_assoc = {}
 
-    # def add_build(self, new_build):
-    #     self.map[new_build.positionX][new_build.positionY] = Building
-    #     if new_build.size > 1:
-    #         for i in range(new_build.size):
-    #             i += 1
-    #             p = Pointeur()
-    #             for y in range(i):
-    #                 self.map[new_build.positionX + i][new_build.positionY + y] = p
-    #                 self.map[new_build.positionX + y][new_build.positionY + i] = p
-    #             self.map[new_build.positionX + i][new_build.positionY + i] = p
+    def add_build(self, new_build):
+        self.map[new_build.positionX][new_build.positionY] = new_build
+        if new_build.size > 1:
+            for i in range(new_build.size):
+                i += 1
+                p = Pointeur(new_build)
+                for y in range(i):
+                    self.map[new_build.positionX + i][new_build.positionY + y] = p
+                    self.map[new_build.positionX + y][new_build.positionY + i] = p
+                self.map[new_build.positionX + i][new_build.positionY + i] = p
+        if isinstance(new_build, Road):
+            print("this is a road")
+            pos = (new_build.positionX, new_build.positionY)
+            self.update_graph(pos)
 
     def get_direction(self, positionX, positionY):  # TODO modifier pour retourner (x, y)
         """
@@ -46,6 +54,7 @@ class mapBuilding():
             res.append((1, 0))  # NE
         if isinstance(self.map[positionX - 1][positionY], Road):
             res.append((-1, 0))  # SW
+        print(res)
         return res
 
     def update_graph(self, pos):
@@ -62,13 +71,15 @@ class mapBuilding():
             self.graph = {pos: {}}
         else:
             (x, y) = pos
-            direct = self.get_direction(self, x, y)
+            direct = self.get_direction(x, y)
             if len(direct) > 1:
-                for i in range(1, direct):
-                    (pos2, distance) = self.calculate_distance(pos, i)
-                    self.add_dist2graph(self, pos, pos2, distance)
+                for i in direct:
+                    (pos2, distance, last_dir) = self.calculate_distance(pos, i)
+                    self.graph_assoc[pos] = {pos2, i}
+                    self.graph_assoc[pos2] = {pos, last_dir}
+                    self.add_dist2graph(pos, pos2, distance)
 
-    def calculate_distance(self, pos, i):  # TODO vérifier que c'est correct
+    def calculate_distance(self, pos, i):
         """
         Method used to calculate the distance between 2 intersections on the road
 
@@ -97,7 +108,7 @@ class mapBuilding():
             elif len(self.get_direction(x, y)) != 2:
                 pos2 = pos
                 stop = True
-        return pos2, distance
+        return pos2, distance, i
 
     def add_dist2graph(self, pos1, pos2, distance):
         """
@@ -119,26 +130,6 @@ class mapBuilding():
             self.graph[pos2] = {}
         if pos1 not in self.graph[pos2]:
             self.graph[pos2][pos1] = distance
-
-    def dijkstra(self, vertex):
-        """
-        Algorithm of dijkstra vertex is the point where we start
-
-        Take from :
-        https://128mots.com/2020/02/18/implementation-python-de-lalgorithme-de-dijkstra/
-        :param vertex: position where we start
-        :return: distance: dictionary of key = position and value = distance between the position and the vertex
-        """
-        queue = deque([vertex])
-        distance = {vertex: 0}
-        while queue:
-            t = queue.popleft()
-            for voisin in self.graph[t]:
-                queue.append(voisin)
-                new_distance = distance[t] + self.graph[t][voisin]
-                if voisin not in distance or new_distance < distance[voisin]:
-                    distance[voisin] = new_distance
-        return distance
 
     def dijkstra(graph, start, end):
         # Initialisation des distances
@@ -185,3 +176,13 @@ class mapBuilding():
     # end = 'D'
     # path = dijkstra(graph, start, end)
     # print(f'Le chemin le plus court entre {start} et {end} est {path}')
+
+
+truc = mapBuilding()
+for i in range(50):
+    x = random.randint(1, 10)
+    y = random.randint(1, 10)
+    road = Road(x, y)
+    truc.add_build(road)
+print(truc.map)
+print(truc.graph)

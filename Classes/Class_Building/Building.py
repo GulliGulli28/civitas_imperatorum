@@ -9,16 +9,16 @@ class Building(ABC):  # hérite de ABC
     size = None
     capacity = None
     price = None
-    id = None
+    idi = None
 
-    def __init__(self, positionX, positionY, size, capacity, price, id):
+    def __init__(self, positionX, positionY, size, capacity, price, idi):
         self.condition = 0  # état du batiment (en feu, détruit)
         self.positionX = positionX  # position du la map axe x
         self.positionY = positionY  # position de la map axe y
         self.size = size  # taille du batiment (2x2, 3x3, ...)
         self.capacity = capacity  # nombre de personne pouvant rentrer dedans (travailler, habiter)
         self.price = price  # prix du batiment
-        self.id = id  # id du batiment
+        self.idi = idi  # id du batiment
 
         dictionnaire_building = {}
         compteur = 0

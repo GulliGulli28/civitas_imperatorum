@@ -1,7 +1,10 @@
+import random
 from abc import ABC  # ABC = abstract base class
 from random import randint
 
-from Classes.Class_Building import mapBuilding
+from Classes.Class_Building.mapBuilding import mapBuilding
+
+
 class Character(ABC):
     health = None
     joy = None
@@ -11,7 +14,7 @@ class Character(ABC):
     sprite_list = None
     sprite_in_list = 0
 
-    def __init__(self, health, joy, positionX, positionY, direction,sprite_list, sprite_in_list):
+    def __init__(self, health, joy, positionX, positionY, direction, sprite_list, sprite_in_list):
         self.joy = joy
         self.health = health
         self.positionX = positionX
@@ -20,46 +23,43 @@ class Character(ABC):
         self.sprite_list = sprite_list
         self.sprite_in_list = sprite_in_list
 
-    def move(self,map):
-        #TODO faut-il pas plutôt mettre en paramètre "move(self,map.getPossibleDirection(self.positionX,self.positionY))" ???
-        #self.position = newPosition
+    def move(self, map_build):
+        """
+        Move a random character
+
+        :param map_build: A instance of actual mapBuilding
+        :type map_build: mapBuilding
+        :return:
+        """
+
+        """
+        Use for animation
         if self.sprite_in_list == 11:
             self.sprite_in_list = 0
         else:
-            self.sprite_in_list+=1
-        liste_direction=["NW", "NE", "SW","SE"]
-        if len(mapBuilding.nbr_direction(self.positionX,self.positionY)) ==1:
-            self.direction=map.nbr_direction[0]
+            self.sprite_in_list += 1
+        """
+        direction_possible = map_build.get_direction()(self.positionX, self.positionY)
+        if len(direction_possible) < 2:
+            direction_possible = random.choice(direction_possible)
+        elif len(direction_possible) == 2:
+            del direction_possible[self.direction]
+        self.directions(direction_possible)
 
-        elif len(mapBuilding.nbr_direction(self.positionX,self.positionY)) ==2:
-            if self.direction not in mapBuilding.nbr_direction:
-                self.direction = mapBuilding.nbr_direction(randint(1))
-        else:
-            if self.direction not in map.nbr_direction:
-                self.direction = mapBuilding.nbr_direction(randint(len(mapBuilding.nbr_direction(self.positionX,self.positionY))))
-        positions(self)#TODO est-ce que c'est pas plutôt "direction(self)"
-        
-            
-
-            
-
-            
-            
     def update_health(self, newHealth):
         self.health = newHealth
 
     def update_joy(self, newJoy):
         self.joy = newJoy
 
-    def directions(self):
-        if self.direction == "NW":
-            self.positionY +=1
-        elif self.direction == "NE":
-            self.positionY -=1
-        elif self.direction == "SW":
-            self.positionX-=1
-        else:
-            self.positionX+=1
-
-
-    
+    def directions(self, direction_possible):
+        """
+        Used to update the position
+        :param direction_possible:
+        :return:
+        """
+        (x, y) = direction_possible
+        self.positionX += x
+        self.positionY += y
+        self.direction = (-x, -y)  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move
+        # l'ancienne position
