@@ -98,13 +98,14 @@ class mapBuilding():
         stop = False
         while not stop:
             old_pos = pos
-            pos += i
+            pos = tuple(map(lambda a, b: a + b, pos, i))#solution d'en dessous
+            #pos += i
             distance += 1
             (x, y) = pos
             direct = self.get_direction(x, y)
             if len(direct) == 2:
-                direct.remove(old_pos - pos)
-                i = direct[1]
+                direct.remove(tuple(map(lambda a, b: a - b, old_pos, pos)))
+                i = direct[0]
             elif len(self.get_direction(x, y)) != 2:
                 pos2 = pos
                 stop = True
@@ -179,7 +180,7 @@ class mapBuilding():
 
 
 truc = mapBuilding()
-for i in range(50):
+for i in range(40):
     x = random.randint(1, 10)
     y = random.randint(1, 10)
     road = Road(x, y)
