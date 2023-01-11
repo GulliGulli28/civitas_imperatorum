@@ -38,7 +38,7 @@ class Walker(Character):
             if len(self.travelHistory) == 0:#if the character is returned to his main building outOfRange=false
                 self.outOfRange = False
         else:
-
+            super().move(build_map)
             if (self.positionX, self.positionY) in self.travelHistory:#if the character has already passed through this position then we reduce the travelHistory from iteration 0 to the iteration in which he has already passed
                 del self.travelHistory[self.travelHistory.index((self.positionX,self.positionY)):len(self.travelHistory)]
             else :#else we add the position to the travelHistory

@@ -44,22 +44,14 @@ class Character(ABC):
             direction_possible = random.choice(direction_possible)
         elif len(direction_possible) == 2:
             del direction_possible[self.direction]
-        self.directions(direction_possible)
+        (x, y) = direction_possible
+        self.positionX += x
+        self.positionY += y
+        self.direction = (-x, -y)  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move
+        # l'ancienne position
 
     def update_health(self, newHealth):
         self.health = newHealth
 
     def update_joy(self, newJoy):
         self.joy = newJoy
-
-    def directions(self, direction_possible):
-        """
-        Used to update the position
-        :param direction_possible:
-        :return:
-        """
-        (x, y) = direction_possible
-        self.positionX += x
-        self.positionY += y
-        self.direction = (-x, -y)  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move
-        # l'ancienne position
