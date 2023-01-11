@@ -23,29 +23,27 @@ class World:
 
     
     def update(self,hud,camera):
-        if hud.selected_tile is not None: 
-            name = hud.selected_tile["name"]
-            img = hud.selected_tile["image"].copy()
-            img.set_alpha(100)
-            (pos_x,pos_y) = pg.mouse.get_pos()
-            (x,y)   = self.mouse_to_grid(pos_x,pos_y,camera)
-            if self.is_placeable(hud,(x,y)):
-                if x <= self.grid_length_x and y <= self.grid_length_y:
-                    render_pos = self.world[x][y]["render_pos"]
-                    iso_poly   = self.world[x][y]["iso_poly"]
-                    self.temp_tile = {
-                        "tile" : name,
-                        "image": img,
-                        "render_pos": render_pos,
-                        "iso_poly": iso_poly
-                        }
-                if pg.mouse.get_pressed()[0]:
-                    self.world[x][y]["tile"] = self.temp_tile["tile"]
-                    self.temp_tile = None
-        if hud.selected_tile is None:
-            self.temp_tile = None
-        
-
+        grid_pos   = self.mouse_to_grid(pg.mouse.get_pos(),camera)
+        if self.is_placeable(hud,grid_pos):
+            if hud.selected_tile is not None: 
+                name = hud.selected_tile["name"]
+                img = hud.selected_tile["image"].copy()
+                img.set_alpha(100)
+                (pos_x,pos_y) = pg.mouse.get_pos()
+                grid_pos   = self.mouse_to_grid(pg.mouse.get_pos(),camera)
+                render_pos = self.world[grid_pos[0]][grid_pos[1]]["render_pos"]
+                iso_poly   = self.world[grid_pos[0]][grid_pos[1]]["iso_poly"]
+                self.temp_tile = {
+                            "tile" : name,
+                            "image": img,
+                            "render_pos": render_pos,
+                            "iso_poly": iso_poly
+                            }
+            else: 
+                self.temp_tile = None
+            if pg.mouse.get_pressed()[0]:
+                self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.temp_tile["tile"]
+                self.temp_tile = None
 
 
     def create_world(self):
@@ -139,8 +137,8 @@ class World:
         y = iso_y - iso_x/2
         return x, y
 
-    def mouse_to_grid(self, x, y, camera):
-        (cart_x, cart_y)= self.iso_to_cart(x - self.grass_tiles.get_width()/2 - camera.scroll.x, y - camera.scroll.y)
+    def mouse_to_grid(self, mouse_pos, camera):
+        (cart_x, cart_y)= self.iso_to_cart(mouse_pos[0] - self.grass_tiles.get_width()/2 - camera.scroll.x, mouse_pos[1] - camera.scroll.y)
         x = int(cart_x // TILE_SIZE)
         y = int(cart_y // TILE_SIZE)
         return x,y
@@ -165,6 +163,10 @@ class World:
         }
 
     def is_placeable(self,hud, grid_pos):
+        if grid_pos[0] < 0 or grid_pos[0] >= self.grid_length_x  or grid_pos[1] < 0 or grid_pos[1] >= self.grid_length_y : 
+            return False
+        if self.world[grid_pos[0]][grid_pos[1]] is None:
+             return False
         mouse_is_off_panel = True
         mouse = pg.mouse.get_pos()
         for rect in [hud.resources_rect, hud.build_rect, hud.select_rect]:
