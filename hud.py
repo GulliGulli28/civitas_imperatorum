@@ -33,8 +33,6 @@ class Hud:
 
     def draw(self, screen):
         images = self.images
-        hud_width = images["right_hud"].get_width()
-        print(HUD_WIDTH) 
         icon_1_width, icon_1_height = images["icon_1"].get_width(), images["icon_1"].get_height()
         # resources hud
         screen.blit(self.resources_surface, (0, 0))
@@ -109,8 +107,8 @@ class Hud:
         right_hud = pg.image.load("graphics/paneling/right_hud.png").convert_alpha()
         icon_1 = pg.image.load("graphics/paneling/paneling_00020.png").convert_alpha()
         overlays_case = pg.image.load("graphics/paneling/overlays_case.png").convert_alpha()
-        clear = pg.image.load("graphics/paneling/clear.png").convert_alpha()
-
+        
+        clear = pg.image.load("graphics/shovel.png").convert_alpha()
         road = pg.image.load("graphics/paneling/road.png").convert_alpha()
         housing = pg.image.load("graphics/housing.png").convert_alpha()
         water = pg.image.load("graphics/water.png").convert_alpha()

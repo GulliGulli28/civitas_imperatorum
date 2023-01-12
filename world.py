@@ -24,27 +24,29 @@ class World:
     
     def update(self,hud,camera):
         grid_pos   = self.mouse_to_grid(pg.mouse.get_pos(),camera)
-        if self.is_placeable(hud,grid_pos):
-            if hud.selected_tile is not None: 
-                name = hud.selected_tile["name"]
-                img = hud.selected_tile["image"].copy()
-                img.set_alpha(100)
-                (pos_x,pos_y) = pg.mouse.get_pos()
-                grid_pos   = self.mouse_to_grid(pg.mouse.get_pos(),camera)
+        if hud.selected_tile is not None: 
+            name = hud.selected_tile["name"]
+            img = hud.selected_tile["image"].copy()
+            img.set_alpha(100)
+            if not self.is_out_of_map(grid_pos) and not self.is_on_panel(hud):
                 render_pos = self.world[grid_pos[0]][grid_pos[1]]["render_pos"]
                 iso_poly   = self.world[grid_pos[0]][grid_pos[1]]["iso_poly"]
                 self.temp_tile = {
                             "tile" : name,
                             "image": img,
                             "render_pos": render_pos,
+                            "grid" : grid_pos,
                             "iso_poly": iso_poly
                             }
-            else: 
-                self.temp_tile = None
-            if pg.mouse.get_pressed()[0]:
-                self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.temp_tile["tile"]
-                self.temp_tile = None
-
+        else: 
+            self.temp_tile = None
+        if self.temp_tile is not None and pg.mouse.get_pressed()[0]:
+            if self.temp_tile["tile"] == "clear":
+                self.remove_buiding(grid_pos)
+            elif self.is_placeable(grid_pos):
+                self.place_building(grid_pos)
+            else:
+                pass
 
     def create_world(self):
 
@@ -84,10 +86,19 @@ class World:
                 # p = [(x + self.width/2, y + self.height/4) for x, y in p]
                 # pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
         if self.temp_tile is not None:
-            render_pos = self.temp_tile["render_pos"]    
+            render_pos = self.temp_tile["render_pos"]
+            poly = self.temp_tile["iso_poly"]
+            poly = [(x + self.width - TILE_SIZE + camera.scroll.x, y  + camera.scroll.y) for x, y in poly] 
             screen.blit(self.temp_tile["image"],
                                 (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x,
                                 render_pos[1] - (self.temp_tile["image"].get_height() - TILE_SIZE) + camera.scroll.y))
+            if self.temp_tile["tile"] == "clear":
+                pg.draw.polygon(screen, (255, 0, 0), poly , 1)
+            else :
+                if self.is_placeable(self.temp_tile["grid"]):
+                    pg.draw.polygon(screen, (0, 255, 0), poly , 1)
+                else: 
+                    pg.draw.polygon(screen, (255, 0, 0), poly , 1)
 
 
     def grid_to_world(self, grid_x, grid_y):  # Cette fonction retourne un dictionnaire contenant les coordonnées de chaque tuile
@@ -154,29 +165,41 @@ class World:
         governments = pg.image.load("graphics/government.png").convert_alpha()
         security = pg.image.load("graphics/security.png").convert_alpha()
 
+        clear = pg.image.load("graphics/paneling/clear.png").convert_alpha()
+
         return {"block":land, "tree":tree, "rock": rock,
             "road": road,
             "housing" : housing,
             "water" : water,
             "government" : governments,
-            "security" : security
+            "security" : security,
+            "clear" : clear
         }
-
-    def is_placeable(self,hud, grid_pos):
+    
+    def is_out_of_map(self, grid_pos):
         if grid_pos[0] < 0 or grid_pos[0] >= self.grid_length_x  or grid_pos[1] < 0 or grid_pos[1] >= self.grid_length_y : 
+            return True
+        elif self.world[grid_pos[0]][grid_pos[1]] is None:
+            return True
+        else:
             return False
-        if self.world[grid_pos[0]][grid_pos[1]] is None:
-             return False
-        mouse_is_off_panel = True
+
+    def is_on_panel(self,hud):
+        mouse_is_on_panel = False
         mouse = pg.mouse.get_pos()
         for rect in [hud.resources_rect, hud.build_rect, hud.select_rect]:
             if pg.Rect.collidepoint(rect,mouse):
-                mouse_is_off_panel = False
-        return mouse_is_off_panel
+                mouse_is_on_panel = True
+        return mouse_is_on_panel
 
-    def create_batiment():
-        x,y = pygame.mouse.get_pos()
+    
+    def is_placeable(self, grid_pos):
+        return self.world[grid_pos[0]][grid_pos[1]]["tile"] == ""
+    
+    def place_building(self,grid_pos):
+        self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.temp_tile["tile"]
+        self.temp_tile = None
 
-
-
-        
+    def remove_buiding(self,grid_pos):
+        self.world[grid_pos[0]][grid_pos[1]]["tile"] = ""
+        self.temp_tile = None
