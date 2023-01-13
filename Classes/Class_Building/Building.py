@@ -1,3 +1,4 @@
+import time
 from abc import ABC  # ABC = abstract base class
 import hashlib
 
@@ -10,6 +11,8 @@ class Building(ABC):  # hérite de ABC
     capacity = None
     price = None
     idi = None
+    fire_risk = None
+    destruction_risk = None
 
     def __init__(self, positionX, positionY, size, capacity, price, idi):
         self.condition = 0  # état du batiment (en feu, détruit)
@@ -19,10 +22,12 @@ class Building(ABC):  # hérite de ABC
         self.capacity = capacity  # nombre de personne pouvant rentrer dedans (travailler, habiter)
         self.price = price  # prix du batiment
         self.idi = idi  # id du batiment
-
-        dictionnaire_building = {}
-        compteur = 0
-        type_building = ""
+        self.fire_risk = 0
+        self.destruction_risk = 0
+        self.last_update = time.time()
+        # dictionnaire_building = {}
+        # compteur = 0
+        # type_building = ""
 
         """def creer_batiment(self):
             global compteur
@@ -41,6 +46,10 @@ class Building(ABC):  # hérite de ABC
             }
             return dictionnaire_batiment"""
 
-        def creer_batiment():
-            if type == "Farm":
-                p = type
+        # def creer_batiment():
+        #     if type == "Farm":
+        #         p = type
+    def update_risk(self):
+        current_time = time.time()
+        if current_time - self.last_update >= 30:
+            self.last_update = current_time

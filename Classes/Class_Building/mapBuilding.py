@@ -1,13 +1,19 @@
-import random
-
-from Classes.Class_Building.Building import Building
-from Classes.Class_Building.Road import Road
-from Classes.Class_Building.Pointeur import Pointeur
-from collections import deque
 import math
+import random
+from Classes.Class_Building.Building import Building
+from Classes.Class_Building.Engineer_post import Engineer_post
+from Classes.Class_Building.Farm import Farm
+from Classes.Class_Building.Granary import Granary
+from Classes.Class_Building.House import House
+from Classes.Class_Building.Market import Market
+from Classes.Class_Building.Pointeur import Pointeur
+from Classes.Class_Building.Prefecture import Prefecture
+from Classes.Class_Building.Reservoir import Reservoir
+from Classes.Class_Building.Road import Road
+from Classes.Class_Building.Senate import Senate
 
 
-class mapBuilding():
+class mapBuilding:
     def __init__(self):
         self.sizeX = 50
         self.sizeY = 50
@@ -16,11 +22,20 @@ class mapBuilding():
         self.graph_assoc = {}
 
     def add_build(self, new_build):
+        road_near = False
+        for i in range(new_build.size):  # check that there is a road next to the building
+            for y in range(new_build.size):
+                if len(self.get_direction(self, new_build.positionX + i, new_build.positionY + y)) > 0:
+                    road_near = True
+                if len(self.get_direction(self, new_build.positionX + y, new_build.positionY + i)) > 0:
+                    road_near = True
+        if not road_near:
+            return 0
         self.map[new_build.positionX][new_build.positionY] = new_build
         if new_build.size > 1:
             for i in range(new_build.size):
                 i += 1
-                p = Pointeur(new_build)
+                p = class_building.Pointeur(new_build)
                 for y in range(i):
                     self.map[new_build.positionX + i][new_build.positionY + y] = p
                     self.map[new_build.positionX + y][new_build.positionY + i] = p
@@ -29,6 +44,8 @@ class mapBuilding():
             print("this is a road")
             pos = (new_build.positionX, new_build.positionY)
             self.update_graph(pos)
+        elif isinstance(new_build, House):
+            game.add_resident(5)
 
     def get_direction(self, positionX, positionY):  # TODO modifier pour retourner (x, y)
         """
@@ -98,8 +115,8 @@ class mapBuilding():
         stop = False
         while not stop:
             old_pos = pos
-            pos = tuple(map(lambda a, b: a + b, pos, i))#solution d'en dessous
-            #pos += i
+            pos = tuple(map(lambda a, b: a + b, pos, i))  # solution d'en dessous
+            # pos += i
             distance += 1
             (x, y) = pos
             direct = self.get_direction(x, y)
