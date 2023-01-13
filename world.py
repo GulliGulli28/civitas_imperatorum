@@ -70,21 +70,17 @@ class World:
 
         for x in range(self.grid_length_x):
             for y in range(self.grid_length_y):
-
-                #sq = self.world.world[x][y]["cart_rect"]
-                #rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE, TILE_SIZE)
-                #pg.draw.rect(self.screen, (0, 0, 255), rect, 1)
                 render_pos= self.world[x][y]["render_pos"]
-
                 tile = self.world[x][y]["tile"]
                 if tile != "":
+                    if tile == "road":
+                        for i,j in [(-1,0),(1,0),(0,-1),(0,1)]:
+                            if not self.is_out_of_map([x+i,y+j]) and self.world[x+i][y+j]["tile"] == "road":
+                                tile += str(1)
+                            else : tile += str(0)
                     screen.blit(self.tiles[tile],
                                     (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x,
                                      render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
-
-                # p = self.world.world[x][y]["iso_poly"]
-                # p = [(x + self.width/2, y + self.height/4) for x, y in p]
-                # pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
         if self.temp_tile is not None:
             render_pos = self.temp_tile["render_pos"]
             poly = self.temp_tile["iso_poly"]
@@ -154,12 +150,42 @@ class World:
         y = int(cart_y // TILE_SIZE)
         return x,y
 
+    def render_pos_to_poly(self, render_pos):
+        (x,y) = render_pos
+        iso_poly = [
+            (x,y),
+            (x + TILE_SIZE,y - TILE_SIZE/2),
+            (x + TILE_SIZE,y + TILE_SIZE),
+            (x + TILE_SIZE,y + TILE_SIZE/2)
+        ]
+        return iso_poly
+
     def load_images(self):
         land= pg.image.load("graphics/land.png")
         tree= pg.image.load("graphics/tree.png")
         rock=pg.image.load("graphics/rock.png")
 
-        road = pg.image.load("graphics/paneling/road.png").convert_alpha()
+        road_N = pg.image.load("graphics/Land2a_00101.png").convert_alpha()
+        road_S = pg.image.load("graphics/Land2a_00105.png").convert_alpha()
+        road_W = pg.image.load("graphics/Land2a_00104.png").convert_alpha()
+        road_E = pg.image.load("graphics/Land2a_00102.png").convert_alpha()
+
+        road_WE = pg.image.load("graphics/Land2a_00096.png").convert_alpha()
+        road_NS = pg.image.load("graphics/Land2a_00095.png").convert_alpha()
+
+        road_ES = pg.image.load("graphics/Land2a_00098.png").convert_alpha()
+        road_EN = pg.image.load("graphics/Land2a_00097.png").convert_alpha()
+        road_WS = pg.image.load("graphics/Land2a_00099.png").convert_alpha()
+        road_WN = pg.image.load("graphics/Land2a_00100.png").convert_alpha()
+
+        road_WEN = pg.image.load("graphics/Land2a_00109.png").convert_alpha()
+        road_WES = pg.image.load("graphics/Land2a_00107.png").convert_alpha()
+        road_WNS = pg.image.load("graphics/Land2a_00108.png").convert_alpha()
+        road_ENS = pg.image.load("graphics/Land2a_00106.png").convert_alpha()
+
+        road_WENS = pg.image.load("graphics/Land2a_00110.png").convert_alpha()
+
+
         housing = pg.image.load("graphics/housing.png").convert_alpha()
         water = pg.image.load("graphics/water.png").convert_alpha()
         governments = pg.image.load("graphics/government.png").convert_alpha()
@@ -168,7 +194,12 @@ class World:
         clear = pg.image.load("graphics/paneling/clear.png").convert_alpha()
 
         return {"block":land, "tree":tree, "rock": rock,
-            "road": road,
+            "road0000":road_NS,
+            "road0001": road_S,"road0010": road_N,"road0100":road_E,"road1000": road_W,
+            "road0011": road_NS,"road1100": road_WE,
+            "road0101": road_ES,"road0110": road_EN,"road1001":road_WS,"road1010":road_WN,
+            "road1110": road_WEN,"road1101":road_WES,"road1011":road_WNS,"road0111":road_ENS,
+            "road1111":road_WENS,
             "housing" : housing,
             "water" : water,
             "government" : governments,
