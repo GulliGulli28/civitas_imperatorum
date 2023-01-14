@@ -35,7 +35,7 @@ class mapBuilding:
         if new_build.size > 1:
             for i in range(new_build.size):
                 i += 1
-                p = class_building.Pointeur(new_build)
+                p = Pointeur(new_build.positionX, new_build.positionY, new_build.idi)
                 for y in range(i):
                     self.map[new_build.positionX + i][new_build.positionY + y] = p
                     self.map[new_build.positionX + y][new_build.positionY + i] = p

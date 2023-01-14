@@ -1,15 +1,15 @@
 import time
 
-import Building
+from Classes.Class_Building.Building import Building
 
 
 class Farm(Building):
     type_crop = None  # type de culture (blé, raisin, etc)
 
-    def __init__(self, type_crop, last_production_time):
+    def __init__(self, type_crop, positionX, positionY, size, capacity, price, idi):
         self.type_crop = type_crop
-        super.__init__()
-        self.last_production_time = time.time(s)
+        super().__init__(positionX, positionY, size, capacity, price, idi)
+        self.last_production_time = time.time()
 
     def produce(self):
         current_time = time.time()

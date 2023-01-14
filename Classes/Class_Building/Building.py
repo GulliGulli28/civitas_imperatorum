@@ -25,6 +25,7 @@ class Building(ABC):  # hérite de ABC
         self.fire_risk = 0
         self.destruction_risk = 0
         self.last_update = time.time()
+        self.name = None
         # dictionnaire_building = {}
         # compteur = 0
         # type_building = ""
