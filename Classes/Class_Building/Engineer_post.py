@@ -1,5 +1,4 @@
-import Building
-
+from Classes.Class_Building.Building import Building
 
 class Engineer_post(Building):
 
