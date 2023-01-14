@@ -1,7 +1,9 @@
 import pygame as pg
 import random
 import noise
-from settings import TILE_SIZE
+from Classes.Class_Building.Building import Building
+from Classes.Class_Building.mapBuilding import mapBuilding
+from settings import TILE_SIZE,HUD_WIDTH
 
 
 class World:
@@ -17,7 +19,12 @@ class World:
         self.grass_tiles = pg.Surface(
             (grid_length_x * TILE_SIZE * 2, grid_length_y * TILE_SIZE + 2 * TILE_SIZE)).convert_alpha()
         self.tiles = self.load_images()
+        self.mini_tiles = self.load_mini_image_values()
         self.world = self.create_world()
+
+        
+        self.building_list = mapBuilding()
+
         
         self.temp_tile = None
 
@@ -42,9 +49,9 @@ class World:
             self.temp_tile = None
         if self.temp_tile is not None and pg.mouse.get_pressed()[0]:
             if self.temp_tile["tile"] == "clear":
-                self.remove_buiding(grid_pos)
+                self.remove_buiding(self.temp_tile["grid"])
             elif self.is_placeable(grid_pos):
-                self.place_building(grid_pos)
+                self.place_building(self.temp_tile["grid"])
             else:
                 pass
 
@@ -67,6 +74,10 @@ class World:
     def draw(self,screen,camera):
         screen.fill((0, 0, 0))
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
+
+        for Building in self.building_list.map.item():
+            if Building is not None:
+                print(str(Building.positionX) + " , " + str(Building.positionY))
 
         for x in range(self.grid_length_x):
             for y in range(self.grid_length_y):
@@ -207,6 +218,14 @@ class World:
             "clear" : clear
         }
     
+    def load_mini_image_values(self):
+        return {"" : (0,255,0),
+                "tree"  : (0,255,0),
+                "rock"  : (128,128,128),
+                "road"  : (255,255,255),
+                "housing" : (218,165,32)
+        }
+
     def is_out_of_map(self, grid_pos):
         if grid_pos[0] < 0 or grid_pos[0] >= self.grid_length_x  or grid_pos[1] < 0 or grid_pos[1] >= self.grid_length_y : 
             return True
@@ -229,6 +248,11 @@ class World:
     
     def place_building(self,grid_pos):
         self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.temp_tile["tile"]
+        if self.building_list.map is None:
+            id = 1
+        else: id = len(self.building_list.map)
+        new_building = Building(grid_pos[0],grid_pos[1],1,1,1,id)
+        self.building_list.add_build(new_building)
         self.temp_tile = None
 
     def remove_buiding(self,grid_pos):

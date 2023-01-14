@@ -43,6 +43,9 @@ liste_sprites_SW_walker=[]
 liste_sprites_NW_walker=[]
 liste_sprites_SE_walker=[]
 
+
+
+
 liste_sprites_NE_worker=[]
 liste_sprites_SW_worker=[]
 liste_sprites_NW_worker=[]

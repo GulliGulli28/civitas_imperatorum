@@ -1,5 +1,5 @@
-import Building
-import Road
+from Classes.Class_Building.Building import Building
+#from Classes.Class_Building.Road import Road
 
 
 class mapBuilding():
@@ -9,7 +9,7 @@ class mapBuilding():
         self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
 
     def add_build(self, newbuild):
-        self.map[newbuild.positionX][newbuild.positionY] = Building
+        self.map[newbuild.positionX][newbuild.positionY] = newbuild
         if newbuild.size > 1:
             for i in range(newbuild.size):
                 i += 1
