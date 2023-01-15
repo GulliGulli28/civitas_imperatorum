@@ -4,6 +4,7 @@ import noise
 from Classes.Class_Building.Building import Building
 from Classes.Class_Building.mapBuilding import mapBuilding
 from settings import TILE_SIZE,HUD_WIDTH
+from settings import TILE_SIZE
 
 
 class World:
@@ -21,32 +22,26 @@ class World:
         self.tiles = self.load_images()
         self.mini_tiles = self.load_mini_image_values()
         self.world = self.create_world()
-
-        
-        self.building_list = mapBuilding()
-
-        
+        self.map_building = mapBuilding()
         self.temp_tile = None
 
-    
-    def update(self,hud,camera):
-        grid_pos   = self.mouse_to_grid(pg.mouse.get_pos(),camera)
-        if hud.selected_tile is not None: 
+    def update(self, hud, camera):
+        grid_pos = self.mouse_to_grid(pg.mouse.get_pos(), camera)
+        if self.is_on_panel(hud) or self.is_out_of_map(grid_pos) or hud.selected_tile is None:
+            self.temp_tile = None
+        else:
             name = hud.selected_tile["name"]
             img = hud.selected_tile["image"].copy()
             img.set_alpha(100)
-            if not self.is_out_of_map(grid_pos) and not self.is_on_panel(hud):
-                render_pos = self.world[grid_pos[0]][grid_pos[1]]["render_pos"]
-                iso_poly   = self.world[grid_pos[0]][grid_pos[1]]["iso_poly"]
-                self.temp_tile = {
-                            "tile" : name,
-                            "image": img,
-                            "render_pos": render_pos,
-                            "grid" : grid_pos,
-                            "iso_poly": iso_poly
-                            }
-        else: 
-            self.temp_tile = None
+            render_pos = self.world[grid_pos[0]][grid_pos[1]]["render_pos"]
+            iso_poly = self.world[grid_pos[0]][grid_pos[1]]["iso_poly"]
+            self.temp_tile = {
+                    "tile": name,
+                    "image": img,
+                    "render_pos": render_pos,
+                    "grid": grid_pos,
+                    "iso_poly": iso_poly
+            }
         if self.temp_tile is not None and pg.mouse.get_pressed()[0]:
             if self.temp_tile["tile"] == "clear":
                 self.remove_buiding(self.temp_tile["grid"])
@@ -70,45 +65,49 @@ class World:
                                       (render_pos[0] + self.grass_tiles.get_width() / 2, render_pos[1]))
 
         return world
-    
-    def draw(self,screen,camera):
+
+    def draw(self, screen, camera):
         screen.fill((0, 0, 0))
         screen.blit(self.grass_tiles, (camera.scroll.x, camera.scroll.y))
 
-        for Building in self.building_list.map.item():
-            if Building is not None:
-                print(str(Building.positionX) + " , " + str(Building.positionY))
-
         for x in range(self.grid_length_x):
             for y in range(self.grid_length_y):
-                render_pos= self.world[x][y]["render_pos"]
+                render_pos = self.world[x][y]["render_pos"]
                 tile = self.world[x][y]["tile"]
                 if tile != "":
                     if tile == "road":
-                        for i,j in [(-1,0),(1,0),(0,-1),(0,1)]:
-                            if not self.is_out_of_map([x+i,y+j]) and self.world[x+i][y+j]["tile"] == "road":
+                        for i, j in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                            if not self.is_out_of_map([x + i, y + j]) and self.world[x + i][y + j]["tile"] == "road":
                                 tile += str(1)
-                            else : tile += str(0)
+                            else:
+                                tile += str(0)
                     screen.blit(self.tiles[tile],
-                                    (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x,
-                                     render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
+                                (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
+                                 render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
+                #if self.map_building.map[x][y] is not None:
+                    #tile = self.map_building.map[x][y].name
+                    #screen.blit(self.tiles[tile],
+                                #(render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
+                                 #render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
+
+
         if self.temp_tile is not None:
             render_pos = self.temp_tile["render_pos"]
             poly = self.temp_tile["iso_poly"]
-            poly = [(x + self.width - TILE_SIZE + camera.scroll.x, y  + camera.scroll.y) for x, y in poly] 
+            poly = [(x + self.width - TILE_SIZE + camera.scroll.x, y + camera.scroll.y) for x, y in poly]
             screen.blit(self.temp_tile["image"],
-                                (render_pos[0] + self.grass_tiles.get_width()/2 + camera.scroll.x,
-                                render_pos[1] - (self.temp_tile["image"].get_height() - TILE_SIZE) + camera.scroll.y))
+                        (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
+                         render_pos[1] - (self.temp_tile["image"].get_height() - TILE_SIZE) + camera.scroll.y))
             if self.temp_tile["tile"] == "clear":
-                pg.draw.polygon(screen, (255, 0, 0), poly , 1)
-            else :
+                pg.draw.polygon(screen, (255, 0, 0), poly, 1)
+            else:
                 if self.is_placeable(self.temp_tile["grid"]):
-                    pg.draw.polygon(screen, (0, 255, 0), poly , 1)
-                else: 
-                    pg.draw.polygon(screen, (255, 0, 0), poly , 1)
+                    pg.draw.polygon(screen, (0, 255, 0), poly, 1)
+                else:
+                    pg.draw.polygon(screen, (255, 0, 0), poly, 1)
 
-
-    def grid_to_world(self, grid_x, grid_y):  # Cette fonction retourne un dictionnaire contenant les coordonnées de chaque tuile
+    def grid_to_world(self, grid_x,
+                      grid_y):  # Cette fonction retourne un dictionnaire contenant les coordonnées de chaque tuile
 
         rect = [
             (grid_x * TILE_SIZE, grid_y * TILE_SIZE),
@@ -151,30 +150,31 @@ class World:
         return iso_x, iso_y
 
     def iso_to_cart(self, iso_x, iso_y):
-        x = iso_y + iso_x/2
-        y = iso_y - iso_x/2
+        x = iso_y + iso_x / 2
+        y = iso_y - iso_x / 2
         return x, y
 
     def mouse_to_grid(self, mouse_pos, camera):
-        (cart_x, cart_y)= self.iso_to_cart(mouse_pos[0] - self.grass_tiles.get_width()/2 - camera.scroll.x, mouse_pos[1] - camera.scroll.y)
+        (cart_x, cart_y) = self.iso_to_cart(mouse_pos[0] - self.grass_tiles.get_width() / 2 - camera.scroll.x,
+                                            mouse_pos[1] - camera.scroll.y)
         x = int(cart_x // TILE_SIZE)
         y = int(cart_y // TILE_SIZE)
-        return x,y
+        return x, y
 
     def render_pos_to_poly(self, render_pos):
-        (x,y) = render_pos
+        (x, y) = render_pos
         iso_poly = [
-            (x,y),
-            (x + TILE_SIZE,y - TILE_SIZE/2),
-            (x + TILE_SIZE,y + TILE_SIZE),
-            (x + TILE_SIZE,y + TILE_SIZE/2)
+            (x, y),
+            (x + TILE_SIZE, y - TILE_SIZE / 2),
+            (x + TILE_SIZE, y + TILE_SIZE),
+            (x + TILE_SIZE, y + TILE_SIZE / 2)
         ]
         return iso_poly
 
     def load_images(self):
-        land= pg.image.load("graphics/land.png")
-        tree= pg.image.load("graphics/tree.png")
-        rock=pg.image.load("graphics/rock.png")
+        land = pg.image.load("graphics/land.png")
+        tree = pg.image.load("graphics/tree.png")
+        rock = pg.image.load("graphics/rock.png")
 
         road_N = pg.image.load("graphics/Land2a_00101.png").convert_alpha()
         road_S = pg.image.load("graphics/Land2a_00105.png").convert_alpha()
@@ -195,7 +195,6 @@ class World:
         road_ENS = pg.image.load("graphics/Land2a_00106.png").convert_alpha()
 
         road_WENS = pg.image.load("graphics/Land2a_00110.png").convert_alpha()
-
 
         housing = pg.image.load("graphics/housing.png").convert_alpha()
         water = pg.image.load("graphics/water.png").convert_alpha()
@@ -227,34 +226,29 @@ class World:
         }
 
     def is_out_of_map(self, grid_pos):
-        if grid_pos[0] < 0 or grid_pos[0] >= self.grid_length_x  or grid_pos[1] < 0 or grid_pos[1] >= self.grid_length_y : 
+        if grid_pos[0] < 0 or grid_pos[0] >= self.grid_length_x or grid_pos[1] < 0 or grid_pos[1] >= self.grid_length_y:
             return True
         elif self.world[grid_pos[0]][grid_pos[1]] is None:
             return True
         else:
             return False
 
-    def is_on_panel(self,hud):
+    def is_on_panel(self, hud):
         mouse_is_on_panel = False
         mouse = pg.mouse.get_pos()
         for rect in [hud.resources_rect, hud.build_rect, hud.select_rect]:
-            if pg.Rect.collidepoint(rect,mouse):
+            if pg.Rect.collidepoint(rect, mouse):
                 mouse_is_on_panel = True
         return mouse_is_on_panel
 
-    
     def is_placeable(self, grid_pos):
         return self.world[grid_pos[0]][grid_pos[1]]["tile"] == ""
-    
-    def place_building(self,grid_pos):
+
+    def place_building(self, grid_pos):
         self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.temp_tile["tile"]
-        if self.building_list.map is None:
-            id = 1
-        else: id = len(self.building_list.map)
-        new_building = Building(grid_pos[0],grid_pos[1],1,1,1,id)
-        self.building_list.add_build(new_building)
+        #self.map_building.add_build(Building(grid_pos[0], grid_pos[1], 1, 1, 1, 1))
         self.temp_tile = None
 
-    def remove_buiding(self,grid_pos):
+    def remove_buiding(self, grid_pos):
         self.world[grid_pos[0]][grid_pos[1]]["tile"] = ""
         self.temp_tile = None
