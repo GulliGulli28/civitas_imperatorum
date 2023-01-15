@@ -1,7 +1,10 @@
-import Character
+from Classes.Class_Character.Character import Character
 
 
 class Resident(Character):
+
+    def __init__(self, health, joy, positionX, positionY, direction, sprite_list, sprite_in_list):
+        super().__init__(health, joy, positionX, positionY, direction, sprite_list, sprite_in_list)
     
 
 

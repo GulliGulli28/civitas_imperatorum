@@ -2,7 +2,7 @@ import random
 from abc import ABC  # ABC = abstract base class
 from random import randint
 
-from Classes.Class_Building.mapBuilding import mapBuilding
+#from Classes.Class_Building.mapBuilding import mapBuilding
 
 
 class Character(ABC):
@@ -14,14 +14,14 @@ class Character(ABC):
     sprite_list = None
     sprite_in_list = 0
 
-    def __init__(self, health, joy, positionX, positionY, direction, sprite_list, sprite_in_list):
-        self.joy = joy
-        self.health = health
+    def __init__(self, positionX, positionY, direction):
+        self.joy = 100
+        self.health = 100
         self.positionX = positionX
         self.positionY = positionY
         self.direction = direction
-        self.sprite_list = sprite_list
-        self.sprite_in_list = sprite_in_list
+        self.sprite_list = None  # Pour animation future
+        self.sprite_in_list = None
 
     def move(self, map_build):
         """

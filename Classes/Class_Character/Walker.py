@@ -20,12 +20,12 @@ class Walker(Character):
     def move(self, build_map):
         if self.outOfRange:  # if the character is too far from his main building, he need to go back to him
             (x, y) = self.travelHistory[len(self.travelHistory)]
-            super.positionX = x
-            super.positionY = y
+            super().positionX = x
+            super().positionY = y
             if len(self.travelHistory) == 0:  # if the character is returned to his main building outOfRange=false
                 self.outOfRange = False
         else:
-            super.move(build_map)
+            super().move(build_map)
             if (self.positionX, self.positionY) in self.travelHistory:  # if the character has already passed through
                 # this position then we reduce the travelHistory from iteration 0 to the iteration in which he has
                 # already passed

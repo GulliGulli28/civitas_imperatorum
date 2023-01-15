@@ -1,4 +1,4 @@
-import Character
+from Classes.Class_Character.Character import Character
 
 
 class Worker(Character):

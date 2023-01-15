@@ -47,10 +47,12 @@ class Building(ABC):  # hérite de ABC
             }
             return dictionnaire_batiment"""
 
-        # def creer_batiment():
-        #     if type == "Farm":
-        #         p = type
     def update_risk(self):
+        self.fire_risk += 1
+        self.destruction_risk += 1
+
+    def check_update(self):
         current_time = time.time()
         if current_time - self.last_update >= 30:
             self.last_update = current_time
+            self.update_risk()

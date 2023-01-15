@@ -14,23 +14,32 @@ from Classes.Class_Building.Senate import Senate
 
 
 class mapBuilding:
+    _instance = None
+
+    def __new__(cls):
+        if mapBuilding._instance is None:
+            mapBuilding._instance = super().__new__(cls)
+        return mapBuilding._instance
     def __init__(self):
         self.sizeX = 50
         self.sizeY = 50
         self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
         self.graph = {}
         self.graph_assoc = {}
+        self.listGranary = None
 
     def add_build(self, new_build):
         road_near = False
         for i in range(new_build.size):  # check that there is a road next to the building
             for y in range(new_build.size):
-                if len(self.get_direction(self, new_build.positionX + i, new_build.positionY + y)) > 0:
+                if len(self.get_direction(new_build.positionX + i, new_build.positionY + y)) > 0:
                     road_near = True
-                if len(self.get_direction(self, new_build.positionX + y, new_build.positionY + i)) > 0:
+                if len(self.get_direction(new_build.positionX + y, new_build.positionY + i)) > 0:
                     road_near = True
         if not road_near:
             return 0
+        if isinstance(new_build, Granary):
+            self.listGranary.append(new_build)
         self.map[new_build.positionX][new_build.positionY] = new_build
         if new_build.size > 1:
             for i in range(new_build.size):
@@ -160,6 +169,8 @@ class mapBuilding:
         # Initialisation de la liste des précédents
         previous = {node: None for node in graph}
 
+        #Initialisation du coût total
+        total_cost = 0
         # Boucle principale
         while to_visit:
             # Recherche du noeud avec la distance minimale
@@ -178,6 +189,7 @@ class mapBuilding:
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
                     previous[neighbor] = current
+                    total_cost += distance
 
         # Création du chemin en partant de la fin et en suivant les précédents
         path = []
@@ -187,20 +199,21 @@ class mapBuilding:
             current = previous[current]
 
         # Renvoie du chemin inversé (de la fin vers le début)
-        return list(reversed(path))
+        return list(reversed(path)), total_cost
 
-    # graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
-    # start = 'A'
-    # end = 'D'
-    # path = dijkstra(graph, start, end)
-    # print(f'Le chemin le plus court entre {start} et {end} est {path}')
+    graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
+    start = 'A'
+    end = 'D'
+    path, cost = dijkstra(graph, start, end)
+
+    print(f'Le chemin le plus court entre {start} et {end} est {path} avec comme cout {cost}')
 
 
-truc = mapBuilding()
-for i in range(40):
-    x = random.randint(1, 10)
-    y = random.randint(1, 10)
-    road = Road(x, y)
-    truc.add_build(road)
-print(truc.map)
-print(truc.graph)
+# truc = mapBuilding()
+# for i in range(100):
+#     x = random.randint(1, 10)
+#     y = random.randint(1, 10)
+#     road = Road(x, y)
+#     truc.add_build(road)
+# # print(truc.map)
+# print(truc.graph)
