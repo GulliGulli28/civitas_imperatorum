@@ -1,7 +1,7 @@
 import time
 from abc import ABC  # ABC = abstract base class
 import hashlib
-
+from enum import Enum
 
 class Building(ABC):  # hérite de ABC
     condition = None
@@ -14,7 +14,8 @@ class Building(ABC):  # hérite de ABC
     fire_risk = None
     destruction_risk = None
 
-    def __init__(self, positionX, positionY, size, capacity, price, idi):
+    def __init__(self, name, positionX, positionY, size, capacity, price, idi):
+        self.name = name
         self.condition = 0  # état du batiment (en feu, détruit)
         self.positionX = positionX  # position du la map axe x
         self.positionY = positionY  # position de la map axe y
@@ -25,7 +26,6 @@ class Building(ABC):  # hérite de ABC
         self.fire_risk = 0
         self.destruction_risk = 0
         self.last_update = time.time()
-        self.name = "housing"
         # dictionnaire_building = {}
         # compteur = 0
         # type_building = ""

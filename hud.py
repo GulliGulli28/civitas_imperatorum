@@ -65,17 +65,17 @@ class Hud:
         tiles = []
         for name, image in icons.items():
             name = name
-            if name == "housing":
+            if name == "house":
                 pos = [self.width - HUD_WIDTH + 13.5, 295]
             elif name == "clear":
                 pos = [self.width - HUD_WIDTH + 63, 295]
             elif name == "road":
                 pos = [self.width - HUD_WIDTH + 113, 295]
-            elif name == "water":
+            elif name == "well":
                 pos = [self.width - HUD_WIDTH + 13.5, 330]
-            elif name == "government":
+            elif name == "senate":
                 pos = [self.width - HUD_WIDTH + 63.5, 330]
-            elif name == "security":
+            elif name == "prefecture":
                 pos = [self.width - HUD_WIDTH + 113.5, 330]
             img_tmp = image.copy()
             rect    = img_tmp.get_rect(topleft=pos)
@@ -110,20 +110,20 @@ class Hud:
         
         clear = pg.image.load("graphics/shovel.png").convert_alpha()
         road = pg.image.load("graphics/Land2a_00095.png").convert_alpha()
-        housing = pg.image.load("graphics/housing.png").convert_alpha()
-        water = pg.image.load("graphics/water.png").convert_alpha()
-        governments = pg.image.load("graphics/government.png").convert_alpha()
-        security = pg.image.load("graphics/security.png").convert_alpha()
+        house = pg.image.load("graphics/housing.png").convert_alpha()
+        well = pg.image.load("graphics/well.png").convert_alpha()
+        senate = pg.image.load("graphics/senate.png").convert_alpha()
+        prefecture = pg.image.load("graphics/prefecture.png").convert_alpha()
         images = {
             "right_hud": right_hud,
             "icon_1": icon_1,
             "overlays_case": overlays_case,
             "clear": clear,
             "road": road,
-            "housing" : housing,
-            "water" : water,
-            "government" : governments,
-            "security" : security
+            "house" : house,
+            "well" : well,
+            "senate" : senate,
+            "prefecture" : prefecture
         }
         return images
     
@@ -136,12 +136,12 @@ class Hud:
         government_structures = pg.image.load("graphics/paneling/government_structures.png").convert_alpha()
         security_structures = pg.image.load("graphics/paneling/security_structures.png").convert_alpha()
         icons = {
-            "housing": build_housing,
-            "water": water_structures, 
+            "house": build_housing,
+            "well": water_structures, 
             "clear": clear,
             "road": road,
-            "government": government_structures,
-            "security": security_structures, 
+            "senate": government_structures,
+            "prefecture": security_structures, 
         }
         return icons
 

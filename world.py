@@ -1,10 +1,9 @@
 import pygame as pg
 import random
 import noise
-from Classes.Class_Building.Building import Building
-from Classes.Class_Building.mapBuilding import mapBuilding
 from settings import TILE_SIZE,HUD_WIDTH
 from settings import TILE_SIZE
+from Classes.Class_Building.mapBuilding import mapBuilding,BUILDING_TYPE,type_of_building,factory
 
 
 class World:
@@ -75,6 +74,8 @@ class World:
                 render_pos = self.world[x][y]["render_pos"]
                 tile = self.world[x][y]["tile"]
                 if tile != "":
+                    if self.map_building.map[x][y] is not None:
+                        tile = self.map_building.map[x][y].name
                     if tile == "road":
                         for i, j in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                             if not self.is_out_of_map([x + i, y + j]) and self.world[x + i][y + j]["tile"] == "road":
@@ -84,12 +85,6 @@ class World:
                     screen.blit(self.tiles[tile],
                                 (render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
                                  render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
-                #if self.map_building.map[x][y] is not None:
-                    #tile = self.map_building.map[x][y].name
-                    #screen.blit(self.tiles[tile],
-                                #(render_pos[0] + self.grass_tiles.get_width() / 2 + camera.scroll.x,
-                                 #render_pos[1] - (self.tiles[tile].get_height() - TILE_SIZE) + camera.scroll.y))
-
 
         if self.temp_tile is not None:
             render_pos = self.temp_tile["render_pos"]
@@ -133,6 +128,8 @@ class World:
                 tile = "rock"
             else:
                 tile = ""
+        if grid_x == 25:
+            tile = "road"
 
         out = {
             "grid": [grid_x, grid_y],
@@ -197,9 +194,9 @@ class World:
         road_WENS = pg.image.load("graphics/Land2a_00110.png").convert_alpha()
 
         housing = pg.image.load("graphics/housing.png").convert_alpha()
-        water = pg.image.load("graphics/water.png").convert_alpha()
-        governments = pg.image.load("graphics/government.png").convert_alpha()
-        security = pg.image.load("graphics/security.png").convert_alpha()
+        well = pg.image.load("graphics/well.png").convert_alpha()
+        senate = pg.image.load("graphics/senate.png").convert_alpha()
+        security = pg.image.load("graphics/prefecture.png").convert_alpha()
 
         clear = pg.image.load("graphics/paneling/clear.png").convert_alpha()
 
@@ -210,10 +207,10 @@ class World:
             "road0101": road_ES,"road0110": road_EN,"road1001":road_WS,"road1010":road_WN,
             "road1110": road_WEN,"road1101":road_WES,"road1011":road_WNS,"road0111":road_ENS,
             "road1111":road_WENS,
-            "housing" : housing,
-            "water" : water,
-            "government" : governments,
-            "security" : security,
+            "house" : housing,
+            "well" : well,
+            "prefecture" : security,
+            "senate" : senate,
             "clear" : clear
         }
     
@@ -222,7 +219,7 @@ class World:
                 "tree"  : (0,255,0),
                 "rock"  : (128,128,128),
                 "road"  : (255,255,255),
-                "housing" : (218,165,32)
+                "house" : (218,165,32)
         }
 
     def is_out_of_map(self, grid_pos):
@@ -245,10 +242,15 @@ class World:
         return self.world[grid_pos[0]][grid_pos[1]]["tile"] == ""
 
     def place_building(self, grid_pos):
-        self.world[grid_pos[0]][grid_pos[1]]["tile"] = self.temp_tile["tile"]
-        #self.map_building.add_build(Building(grid_pos[0], grid_pos[1], 1, 1, 1, 1))
+        if self.temp_tile["tile"] == "road": 
+            self.world[grid_pos[0]][grid_pos[1]]["tile"] = "road"
+        type = type_of_building(self.temp_tile["tile"])
+        new_build = factory(type,grid_pos[0],grid_pos[1],1)
+        self.map_building.add_build(new_build)
         self.temp_tile = None
 
     def remove_buiding(self, grid_pos):
         self.world[grid_pos[0]][grid_pos[1]]["tile"] = ""
         self.temp_tile = None
+
+

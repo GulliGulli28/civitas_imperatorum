@@ -6,10 +6,10 @@ from Classes.Class_Building.Building import Building
 class Farm(Building):
     type_crop = None  # type de culture (blé, raisin, etc)
 
-    def __init__(self, type_crop, last_production_time):
+    def __init__(self, positionX, positionY, idi,type_crop, last_production_time):
+        super.__init__('farm', positionX, positionY, 1 , 10, 15, idi)
+        self.last_production_time = time.time(last_production_time)
         self.type_crop = type_crop
-        super.__init__()
-        self.last_production_time = time.time(s)
 
     def produce(self):
         current_time = time.time()
