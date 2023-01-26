@@ -246,7 +246,6 @@ class World:
         if tile == "road": 
             self.world[grid_pos[0]][grid_pos[1]]["tile"] = "road"
         self.map_building.place_build(tile,grid_pos[0],grid_pos[1])
-        print(self.map_building.map[grid_pos[0]][grid_pos[1]])
         self.temp_tile = None
 
     def remove_buiding(self, grid_pos):
