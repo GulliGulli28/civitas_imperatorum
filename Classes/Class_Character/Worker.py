@@ -2,6 +2,10 @@ from Classes.Class_Character.Character import Character
 
 
 class Worker(Character):
+
+    def __init__(self, positionX, positionY, direction):
+        super().__init__(positionX, positionY, direction)
+
     
 
     def liste_sprite_worker(self):

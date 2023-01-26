@@ -4,6 +4,7 @@ from Classes.Class_Building import Building
 from Classes.Class_Building.House import House
 from Classes.Class_Building.Road import Road
 from Classes.Class_Character.Migrant import Migrant
+from Classes.Class_Character.Prefet import Prefet
 import time
 
 
@@ -16,7 +17,7 @@ class Logic_main:
     map_char = mapCharacter()
     drhouse = House(1, 2, 1, 1, 1, 1)
     drhouse.fire_risk = 0.01
-
+    Percy_Weasley = Prefet(1,1,(0,1))
     for i in range(0, 40):
         road = Road(0, i)
         map_build.add_build(road)
@@ -38,6 +39,7 @@ class Logic_main:
             else:
                 char.move()
         print(map_char.list)
+        Percy_Weasley.anti_johnny(map_build)
         time.sleep(1)
     # while 1:
     #     for build_list in map_build.map:
