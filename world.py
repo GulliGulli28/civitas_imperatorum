@@ -73,9 +73,9 @@ class World:
             for y in range(self.grid_length_y):
                 render_pos = self.world[x][y]["render_pos"]
                 tile = self.world[x][y]["tile"]
-                if tile != "":
-                    if self.map_building.map[x][y] is not None:
+                if self.map_building.map[x][y] is not None:
                         tile = self.map_building.map[x][y].name
+                if tile != "":
                     if tile == "road":
                         for i, j in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                             if not self.is_out_of_map([x + i, y + j]) and self.world[x + i][y + j]["tile"] == "road":
@@ -242,11 +242,11 @@ class World:
         return self.world[grid_pos[0]][grid_pos[1]]["tile"] == ""
 
     def place_building(self, grid_pos):
-        if self.temp_tile["tile"] == "road": 
+        tile = self.temp_tile["tile"]
+        if tile == "road": 
             self.world[grid_pos[0]][grid_pos[1]]["tile"] = "road"
-        type = type_of_building(self.temp_tile["tile"])
-        new_build = factory(type,grid_pos[0],grid_pos[1],1)
-        self.map_building.add_build(new_build)
+        self.map_building.place_build(tile,grid_pos[0],grid_pos[1])
+        print(self.map_building.map[grid_pos[0]][grid_pos[1]])
         self.temp_tile = None
 
     def remove_buiding(self, grid_pos):
