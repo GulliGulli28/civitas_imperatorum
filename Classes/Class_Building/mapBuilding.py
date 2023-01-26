@@ -51,6 +51,11 @@ class mapBuilding:
         elif isinstance(new_build, House):
             pass
             #game.add_resident(5)
+    
+    def place_build(self,name,positionX,positionY):
+        type = type_of_building(name)
+        new_build = factory(type,positionX,positionY,1)
+        self.add_build(new_build)
 
     def get_direction(self, positionX, positionY):  # TODO modifier pour retourner (x, y)
         """
