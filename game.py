@@ -56,23 +56,13 @@ class Game:
 
     def run(self):
         self.playing = True
-<<<<<<< HEAD
-        while self.playing:            
+        while self.playing:
             self.clock.tick(60)
             self.events()
             self.update()
-            self.draw()
-            self.music()
-            
-=======
-        while self.playing:
-            #self.clock.tick(60)
-            #self.events()
-            #self.update()
             self.menu()
-            #self.draw()
+            self.draw()
 
->>>>>>> Hadil/Shérif
     def events(self):
         mouse_pos = pg.mouse.get_pos()
         mouse_pressed = pg.mouse.get_pressed()
@@ -125,25 +115,6 @@ class Game:
             (10, 10)
         )
 
-<<<<<<< HEAD
-
-              #  p = self.world.world[x][y]["iso_poly"]
-               # p = [(x + self.width/2, y + self.height/4) for x, y in p]
-                #pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
-
-
-        pg.display.flip()
-
-        
-                
-    def music(self):
-            if pg.mixer.music.get_busy():
-                pass
-            else:
-                pg.mixer.music.load("Time_Time.mp3")
-                pg.mixer.music.play()
-
-=======
         pg.display.flip()
 
     def menu(self):
@@ -243,4 +214,3 @@ class Game:
                         self.screen.blit(bg.image, (0, 0))
                         pg.display.flip()
                         menu = True
->>>>>>> Hadil/Shérif
