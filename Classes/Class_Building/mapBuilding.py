@@ -204,6 +204,13 @@ class mapBuilding:
         # Renvoie du chemin inversé (de la fin vers le début)
         return list(reversed(path)), total_cost
 
+    def get_path_between_node(self, node1, node2):
+        (x, y) = node1
+        direction_possible = self.get_direction(node1)
+        possible_path = []
+        for direction in direction_possible:
+            possible_path.append(node1+direction)
+            while (possible_path[len(possible_path)])
     # graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
     # start = 'A'
     # end = 'D'

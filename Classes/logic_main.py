@@ -19,7 +19,11 @@ class logic_main:
     print(map_build.map)
     house = House(1, 1, 1, 1, 1, 1)
     map_build.add_build(house)
-    migr = Migrant(0, 0, (0, 1))
+    road = Road(40 ,45)
+    house = House(40, 46, 1, 1, 1, 1)
+
+    map_build.add_build(road)
+    migr = Migrant(0, 20, (40, 46))
     map_char.add_character(migr)
     while 1:
         for char in map_char.list:
@@ -30,6 +34,7 @@ class logic_main:
 
             else:
                 char.move()
+        print(char.positionX, char.positionY)
         print(map_char.list)
     # while 1:
     #     for build_list in map_build.map:
