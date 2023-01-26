@@ -26,7 +26,8 @@ class Logic_main:
     map_build.add_build(house)
     migr = Migrant(0, 0, (0, 1))
     map_char.add_character(migr)
-    while 1:
+    false = True
+    while false:
         drhouse.risque_feu()
         drhouse.update_risk()
         print(drhouse.is_on_fire)
