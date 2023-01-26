@@ -9,3 +9,6 @@ class Granary(Building):
         self.stockMax = 2600
         self.stock = 0
         super().__init__("granary", positionX, positionY, 1 , 5, 20, idi)
+
+    def add_food(self, stock):
+        self.stock += stock

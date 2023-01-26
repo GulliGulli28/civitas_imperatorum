@@ -7,7 +7,7 @@ from Classes.Class_Building.Farm import Farm
 from Classes.Class_Building.Granary import Granary
 from Classes.Class_Building.House import House
 from Classes.Class_Building.Market import Market
-#from Classes.Class_Building.Pointeur import Pointeur
+from Classes.Class_Building.Pointeur import Pointeur
 from Classes.Class_Building.Prefecture import Prefecture
 from Classes.Class_Building.Reservoir import Reservoir
 from Classes.Class_Building.Road import Road
@@ -15,26 +15,39 @@ from Classes.Class_Building.Senate import Senate
 
 
 class mapBuilding:
+    _instance = None
+
+    def __new__(cls):
+        if mapBuilding._instance is None:
+            mapBuilding._instance = super().__new__(cls)
+        return mapBuilding._instance
+
     def __init__(self):
         self.sizeX = 50
         self.sizeY = 50
-        self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
-        for j in range(self.sizeY):
-            self.map[25][j] = Road(25,j)
+        self.map = [[None for j in range(self.sizeY+1)] for i in range(self.sizeX+1)]
         self.graph = {}
         self.graph_assoc = {}
-
+        self.listGranary = None
+        self.resident = 0
+        self.unemployed = 0
+        for y in range(self.sizeY):
+            self.map[25][y] = factory(BUILDING_TYPE.ROAD,25,y,y)
+            self.update_graph((25,y))
 
     def add_build(self, new_build):
         road_near = False
-        for i in range(new_build.size):  # check that there is a road next to the building
-            for y in range(new_build.size):
-                if len(self.get_direction(new_build.positionX + i, new_build.positionY + y)) > 0:
-                    road_near = True
-                if len(self.get_direction(new_build.positionX + y, new_build.positionY + i)) > 0:
-                    road_near = True
-        if not road_near:
-            return 0
+        if not (isinstance(new_build, Road)):
+            for i in range(new_build.size):  # check that there is a road next to the building
+                for y in range(new_build.size):
+                    if len(self.get_direction(new_build.positionX + i, new_build.positionY + y)) > 0:
+                        road_near = True
+                    if len(self.get_direction(new_build.positionX + y, new_build.positionY + i)) > 0:
+                        road_near = True
+            if not road_near:
+                return 0
+        if isinstance(new_build, Granary):
+            self.listGranary.append(new_build)
         self.map[new_build.positionX][new_build.positionY] = new_build
         if new_build.size > 1:
             for i in range(new_build.size):
@@ -45,17 +58,26 @@ class mapBuilding:
                     self.map[new_build.positionX + y][new_build.positionY + i] = p
                 self.map[new_build.positionX + i][new_build.positionY + i] = p
         if isinstance(new_build, Road):
-            print("this is a road")
             pos = (new_build.positionX, new_build.positionY)
             self.update_graph(pos)
         elif isinstance(new_build, House):
+            # game.add_resident(5)
             pass
-            #game.add_resident(5)
-    
     def place_build(self,name,positionX,positionY):
         type = type_of_building(name)
         new_build = factory(type,positionX,positionY,1)
         self.add_build(new_build)
+
+    def remove_build(self,positionX,positionY):
+        build = self.map[positionX][positionY]
+        if isinstance(build,Granary):
+            self.listGranary.remove(build)
+        if isinstance(build,House):
+            pass
+        if isinstance(build,Road):
+            pos = (build.positionX,build.positionY)
+            self.update_graph_remove(pos)
+        self.map[positionX][positionY] = None
 
     def get_direction(self, positionX, positionY):  # TODO modifier pour retourner (x, y)
         """
@@ -79,14 +101,15 @@ class mapBuilding:
             res.append((1, 0))  # NE
         if isinstance(self.map[positionX - 1][positionY], Road):
             res.append((-1, 0))  # SW
-        print(res)
         return res
 
     def update_graph(self, pos):
         """
         Method used to update the graph of the road with the intersection.
+
         Args:
             pos (int,int): Position of the road just added.
+
         Returns:
             graph the graph updated
         """
@@ -102,12 +125,17 @@ class mapBuilding:
                     self.graph_assoc[pos2] = {pos, last_dir}
                     self.add_dist2graph(pos, pos2, distance)
 
+    def update_graph_remove(self,pos):
+        pass
+
     def calculate_distance(self, pos, i):
         """
         Method used to calculate the distance between 2 intersections on the road
+
         Args:
             pos (int,int): Position of the road just added.
             i (int,int): The value needed to be sum with the position to get the future position
+
         Returns:
             pos2 (int, int): Position of the second intersection
             distance (int): The distance calculate
@@ -163,6 +191,8 @@ class mapBuilding:
         # Initialisation de la liste des précédents
         previous = {node: None for node in graph}
 
+        # Initialisation du coût total
+        total_cost = 0
         # Boucle principale
         while to_visit:
             # Recherche du noeud avec la distance minimale
@@ -181,6 +211,7 @@ class mapBuilding:
                 if distance < distances[neighbor]:
                     distances[neighbor] = distance
                     previous[neighbor] = current
+                    total_cost += distance
 
         # Création du chemin en partant de la fin et en suivant les précédents
         path = []
@@ -190,7 +221,7 @@ class mapBuilding:
             current = previous[current]
 
         # Renvoie du chemin inversé (de la fin vers le début)
-        return list(reversed(path))
+        return list(reversed(path)), total_cost
 
     # graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
     # start = 'A'

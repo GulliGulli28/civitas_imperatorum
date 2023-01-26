@@ -2,6 +2,8 @@ import time
 from abc import ABC  # ABC = abstract base class
 import hashlib
 from enum import Enum
+import random
+
 
 class Building(ABC):  # hérite de ABC
     condition = None
@@ -26,6 +28,8 @@ class Building(ABC):  # hérite de ABC
         self.fire_risk = 0
         self.destruction_risk = 0
         self.last_update = time.time()
+        self.level = 0
+        self.is_on_fire = False
         # dictionnaire_building = {}
         # compteur = 0
         # type_building = ""
@@ -47,10 +51,25 @@ class Building(ABC):  # hérite de ABC
             }
             return dictionnaire_batiment"""
 
-        # def creer_batiment():
-        #     if type == "Farm":
-        #         p = type
     def update_risk(self):
+        self.fire_risk += 0.01
+        self.destruction_risk += 1
+
+    def risque_feu(self):
+        if self.is_on_fire:
+            print("le batiment est en feu")
+        else:
+            x= random.random()*100
+            if x<self.fire_risk*100:
+                self.is_on_fire = True
+                print("le batiment est maintenant en feu")
+            else:
+                print("Toujours debout")
+    def check_update(self):
         current_time = time.time()
         if current_time - self.last_update >= 30:
             self.last_update = current_time
+            self.update_risk()
+
+    def update_level(self, level):
+        self.level += level
