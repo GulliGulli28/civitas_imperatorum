@@ -20,6 +20,7 @@ class mapBuilding:
         if mapBuilding._instance is None:
             mapBuilding._instance = super().__new__(cls)
         return mapBuilding._instance
+
     def __init__(self):
         self.sizeX = 50
         self.sizeY = 50
@@ -27,17 +28,20 @@ class mapBuilding:
         self.graph = {}
         self.graph_assoc = {}
         self.listGranary = None
+        self.resident = 0
+        self.unemployed = 0
 
     def add_build(self, new_build):
         road_near = False
-        for i in range(new_build.size):  # check that there is a road next to the building
-            for y in range(new_build.size):
-                if len(self.get_direction(new_build.positionX + i, new_build.positionY + y)) > 0:
-                    road_near = True
-                if len(self.get_direction(new_build.positionX + y, new_build.positionY + i)) > 0:
-                    road_near = True
-        if not road_near:
-            return 0
+        if not (isinstance(new_build, Road)):
+            for i in range(new_build.size):  # check that there is a road next to the building
+                for y in range(new_build.size):
+                    if len(self.get_direction(new_build.positionX + i, new_build.positionY + y)) > 0:
+                        road_near = True
+                    if len(self.get_direction(new_build.positionX + y, new_build.positionY + i)) > 0:
+                        road_near = True
+            if not road_near:
+                return 0
         if isinstance(new_build, Granary):
             self.listGranary.append(new_build)
         self.map[new_build.positionX][new_build.positionY] = new_build
@@ -50,13 +54,13 @@ class mapBuilding:
                     self.map[new_build.positionX + y][new_build.positionY + i] = p
                 self.map[new_build.positionX + i][new_build.positionY + i] = p
         if isinstance(new_build, Road):
-            print("this is a road")
             pos = (new_build.positionX, new_build.positionY)
             self.update_graph(pos)
         elif isinstance(new_build, House):
-            game.add_resident(5)
+            # game.add_resident(5)
+            pass
 
-    def get_direction(self, positionX, positionY):  # TODO modifier pour retourner (x, y)
+    def get_direction(self, positionX, positionY):
         """
         Method used by a Character to get the possible future direction
         W---N
@@ -80,7 +84,6 @@ class mapBuilding:
             res.append((1, 0))  # NE
         if isinstance(self.map[positionX - 1][positionY], Road):
             res.append((-1, 0))  # SW
-        print(res)
         return res
 
     def update_graph(self, pos):
@@ -169,7 +172,7 @@ class mapBuilding:
         # Initialisation de la liste des précédents
         previous = {node: None for node in graph}
 
-        #Initialisation du coût total
+        # Initialisation du coût total
         total_cost = 0
         # Boucle principale
         while to_visit:
@@ -201,13 +204,12 @@ class mapBuilding:
         # Renvoie du chemin inversé (de la fin vers le début)
         return list(reversed(path)), total_cost
 
-    graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
-    start = 'A'
-    end = 'D'
-    path, cost = dijkstra(graph, start, end)
-
-    print(f'Le chemin le plus court entre {start} et {end} est {path} avec comme cout {cost}')
-
+    # graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
+    # start = 'A'
+    # end = 'D'
+    # path, cost = dijkstra(graph, start, end)
+    #
+    # print(f'Le chemin le plus court entre {start} et {end} est {path} avec comme cout {cost}')
 
 # truc = mapBuilding()
 # for i in range(100):

@@ -10,7 +10,7 @@ class mapCharacter:
         self.list = []
 
     def add_character(self, character):
-        self.characters.append(character)
+        self.list.append(character)
 
     def remove_character(self, character):
-        self.characters.remove(character)
+        self.list.remove(character)

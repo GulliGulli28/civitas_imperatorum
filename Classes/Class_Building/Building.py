@@ -26,6 +26,7 @@ class Building(ABC):  # hérite de ABC
         self.destruction_risk = 0
         self.last_update = time.time()
         self.name = None
+        self.level = 0
         # dictionnaire_building = {}
         # compteur = 0
         # type_building = ""
@@ -56,3 +57,6 @@ class Building(ABC):  # hérite de ABC
         if current_time - self.last_update >= 30:
             self.last_update = current_time
             self.update_risk()
+
+    def update_level(self, level):
+        self.level += level
