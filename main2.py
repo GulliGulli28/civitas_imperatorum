@@ -18,7 +18,7 @@ def main():
 
     # implement game
     game = Game(screen, clock)
-
+    
     while running:
 
         # start menu goes here
