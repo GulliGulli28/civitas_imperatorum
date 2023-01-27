@@ -161,7 +161,7 @@ class mapBuilding:
         if pos1 not in self.graph[pos2]:
             self.graph[pos2][pos1] = distance
 
-    def dijkstra(graph, start, end):
+    def dijkstra(self, graph, start, end):
         # Initialisation des distances
         distances = {node: math.inf for node in graph}
         distances[start] = 0
@@ -205,31 +205,51 @@ class mapBuilding:
         return list(reversed(path)), total_cost
 
     def get_path_between_node(self, node1, node2):
-        direction_possible = self.get_direction(node1)
+        (x, y) = node1
+        direction_possible = self.get_direction(x, y)
         possible_path = []
         for direction in direction_possible:
             possible_path.append(node1 + direction)
-            while self.get_direction(possible_path[len(possible_path)]) == 2 & possible_path(
-                    len(possible_path)) != node2:
+            while self.get_direction(possible_path[-1].positionX, possible_path[-1].positionY) == 2 & possible_path(
+                    [-1]) != node2:
                 possible_path.append(
-                    possible_path[len(possible_path)] + self.get_direction(possible_path[len(possible_path)]).remove())
+                    possible_path[-1] + self.get_direction(possible_path[-1].positionX,
+                                                           possible_path[-1].positionY).remove())
             if not possible_path(len(possible_path)) == node2:
                 possible_path.clear()
             else:
                 return possible_path
 
-    # graph = {'A':{'B':15,'C':4},'B':{'E':5},'C':{'E':11,'D':2},'D':{'E':3},'E':{}}
+    def contruct_entire_path(self, dij_path):
+        node1 = dij_path[0]
+        entire_path = [node1]
+        dij_path.remove(node1)
+        for node2 in dij_path:
+            entire_path.append(self.get_path_between_node(node1, node2))
+            node1 = node2
+        print(entire_path)
+        return entire_path
+
+    # graph = {'A': {'B': 15, 'C': 4}, 'B': {'E': 5}, 'C': {'E': 11, 'D': 2}, 'D': {'E': 3}, 'E': {}}
     # start = 'A'
     # end = 'D'
     # path, cost = dijkstra(graph, start, end)
-    #
     # print(f'Le chemin le plus court entre {start} et {end} est {path} avec comme cout {cost}')
 
-# truc = mapBuilding()
-# for i in range(100):
-#     x = random.randint(1, 10)
-#     y = random.randint(1, 10)
-#     road = Road(x, y)
-#     truc.add_build(road)
-# # print(truc.map)
-# print(truc.graph)
+
+truc = mapBuilding()
+road1 = (0, 0)
+road2 = (0, 0)
+for i in range(100):
+    x = random.randint(1, 10)
+    y = random.randint(1, 10)
+    if road1 == (0, 0):
+        road1 = (x, y)
+    elif road2 == (0, 0):
+        road2 = (x, y)
+    road = Road(x, y)
+    truc.add_build(road)
+# print(truc.map)
+print(truc.graph)
+path = truc.dijkstra(truc.graph, road1, road2)
+truc.contruct_entire_path(path)
