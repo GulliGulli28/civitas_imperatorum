@@ -44,6 +44,14 @@ class Hud:
 
         screen.blit(images["icon_1"], (self.width - icon_1_width, self.height - icon_1_height))
         screen.blit(images["overlays_case"], (self.width - right_hud_width + 4.5, self.resources_surface.get_height() + 3.5))
+        menu2_case = pg.image.load("graphics/paneling/overlays_case.png")
+        #menu2_case = pg.transform.scale(menu2_case, (1700, 20))
+        menu2_case_rect = menu2_case.get_rect()
+        screen.blit(menu2_case,
+                    (0, 0))
+        screen.blit(menu2_case,
+                    (menu2_case_rect.x+10, 0))
+
         # select hud
         # screen.blit(self.select_surface, (self.width * 0.35, self.height * 0.79))
 
@@ -70,7 +78,7 @@ class Hud:
         security_structures = pg.image.load("graphics/paneling/security_structures.png")
         icon_1 = pg.image.load("graphics/paneling/paneling_00020.png")
         overlays_case = pg.image.load("graphics/paneling/overlays_case.png")
-
+       # menu2_case=pg.image.load("graphics/paneling/overlays_case.png")
 
         build_housing_rect = build_housing.get_rect()
         water_structures_rect = water_structures.get_rect()

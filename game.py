@@ -6,7 +6,8 @@ from utils import draw_text
 from camera import Camera
 from hud import Hud
 import cv2
-#pg.init()
+#pg.font.init()
+#pg.display.init()
 
 class Image():
 
@@ -25,15 +26,20 @@ class Image():
         self.image = pg.image.load(self.path + "_r" + self.extension)
 
 class Game:
-    new_game = pg.image.load("Picture1.jpg")
-    load_game = pg.image.load("Picture2.png")
-    save_game = pg.image.load("Picture3.png")
-    load_game = pg.transform.scale(load_game, (300, 50))
-    load_game_rect = load_game.get_rect()
-    new_game = pg.transform.scale(new_game, (300, 50))
-    new_game_rect = new_game.get_rect()
-    save_game = pg.transform.scale(save_game, (300, 50))
-    save_game_rect = save_game.get_rect()
+    #pg.font.init()
+    new_game = pg.image.load("graphics/paneling/Picture1.png")
+    load_game = pg.image.load("graphics/paneling/Picture2.png")
+    save_game = pg.image.load("graphics/paneling/Picture3.png")
+    #cadre = pg.image.load("graphics/paneling/paneling_00015.png")
+
+    #load_game = pg.transform.scale(load_game, (300, 50))
+    #load_game_rect = load_game.get_rect()
+    #new_game = pg.transform.scale(new_game, (300, 50))
+    #new_game_rect = new_game.get_rect()
+    #save_game = pg.transform.scale(save_game, (300, 50))
+    #save_game_rect = save_game.get_rect()
+    #cadre = pg.transform.scale(cadre, (50, 80))
+    #cadre_rect = cadre.get_rect()
     #bg = pg.image.load("C3_sprites/C3/C3title_00001.png")
     screen_height = 1500
     screen_width = 800
@@ -53,11 +59,13 @@ class Game:
 
 
     def run(self):
+        #pg.init()
         self.playing = True
         while self.playing:
-            #self.clock.tick(60)
-            #self.events()
-            #self.update()
+            self.clock.tick(60)
+            self.events()
+            self.update()
+
             self.menu()
             #self.draw()
 
@@ -116,23 +124,28 @@ class Game:
         pg.display.flip()
 
     def menu(self):
-        #pg.init()
-
+        #cadre = Image("graphics/paneling/paneling_00015.png", ".png")
+        #pg.font.init()
+        cadre = pg.image.load("graphics/paneling/paneling_00015.png")
         running=True
-        load_game = pg.transform.scale(self.load_game, (300, 50))
+        load_game = pg.transform.scale(self.load_game, (300, 300))
         load_game_rect = load_game.get_rect()
         new_game = pg.transform.scale(self.new_game, (300, 50))
         new_game_rect = new_game.get_rect()
-        save_game = pg.transform.scale(self.save_game, (300, 50))
+        save_game = pg.transform.scale(self.save_game, (300, 60))
         save_game_rect = save_game.get_rect()
+        cadre = pg.transform.scale(cadre, (325, 35))
+        cadre_rect = cadre.get_rect()
         load_game_rect.x = 600
-        load_game_rect.y = 500
+        load_game_rect.y = 400
         save_game_rect.x = 600
-        save_game_rect.y = 400
+        save_game_rect.y = 350
         new_game_rect.x = 600
         new_game_rect.y = 300
+        cadre_rect.x = 600
+        cadre_rect.y = 50
         bg = Image("C3_sprites/C3/C3title_00001", ".png")
-        #pg.display.flip()
+        pg.display.flip()
         menu = False
 
         def bouton(panel, mouse):
@@ -147,12 +160,21 @@ class Game:
            # global running
             menu = True
 
-            self.screen.blit(self.load_game, (600, 500))
+            self.screen.blit(cadre, (596, 295))
+            pg.display.flip()
+
+            self.screen.blit(cadre, (596, 345))
+            pg.display.flip()
+
+            self.screen.blit(cadre, (596, 395))
+            pg.display.flip()
+
+            self.screen.blit(self.load_game, (600, 400))
 
             pg.display.flip()
           #  self.load_game_rect.x = 600
            # self.load_game_rect.y = 500
-            self.screen.blit(self.save_game, (600, 400))
+            self.screen.blit(self.save_game, (600, 350))
             pg.display.flip()
         #    self.save_game_rect.x = 600
          #   self.save_game_rect.y = 400
@@ -160,21 +182,24 @@ class Game:
             pg.display.flip()
  #           self.new_game_rect.x = 600
   #          self.new_game_rect.y = 300
-
+            #self.screen.blit(self.cadre, (600, 300))
+            #pg.display.flip()
+            #pg.init()
             while menu:
 
                 for event1 in pg.event.get():
                     if event1.type == pg.QUIT:
                         menu = False
-                        running = False
+                        self.running = False
                         pg.quit()
                         print("fermeture du jeu")
                     elif event1.type == pg.MOUSEBUTTONDOWN:
                         mouse = pg.mouse.get_pos()
                         if bouton(load_game_rect,mouse):
                             menu = False
-                            running = False
+                            self.running = False
                             pg.quit()
+                            print("fermeture du jeu")
                         elif bouton(new_game_rect, mouse):
                             while self.playing:
                                 self.clock.tick(60)
@@ -190,6 +215,8 @@ class Game:
         bg.resize(self.screen_height, self.screen_width)
         self.screen.blit(bg.image, (0, 0))
         pg.display.flip()
+        #pg.init()
+        #pg.display.init()
         while running:
                 # bg.resize(screen_height, screen_width)
                 # screen.blit(bg.image, (0, 0))
@@ -197,7 +224,7 @@ class Game:
                 # screen.blit(bg.image, (0, 0))
                 # c = 1
                 # pygame.display.flip()
-
+               # pg.init()
                 for event in pg.event.get():
                     if menu == True:
                         menu1()
