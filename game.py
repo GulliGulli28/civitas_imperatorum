@@ -180,16 +180,17 @@ class Game:
                 for event1 in pg.event.get():
                     if event1.type == pg.QUIT:
                         menu = False
-                        self.running = False
+                        running = False
                         pg.quit()
                         print("fermeture du jeu")
                     elif event1.type == pg.MOUSEBUTTONDOWN:
                         mouse = pg.mouse.get_pos()
                         if bouton(load_game_rect,mouse):
                             menu = False
-                            self.running = False
+                            running = False
                             pg.quit()
                             print("fermeture du jeu")
+                            exit()
                         elif bouton(new_game_rect, mouse):
                             while self.playing:
                                 self.clock.tick(20)
@@ -221,11 +222,12 @@ class Game:
                     if event.type == pg.QUIT:
                         running = False
                         pg.quit()
+
                         print("fermeture du jeu")
                     elif event.type == pg.MOUSEBUTTONDOWN:
                         #bg = pg.image.load("C3_sprites/C3/0_fired_00001.png")
                         bg = Image("graphics/background/background1", ".png")
-                        bg.resize(self.screen_height, self.screen_width)
+                        bg.resize(self.width,self.height)
                         self.screen.blit(bg.image, (0, 0))
                         pg.display.flip()
                         menu = True
