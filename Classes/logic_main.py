@@ -40,7 +40,7 @@ class Logic_main:
     road = Road(40, 45)
     house = House(40, 46, 1, 1, 1, 1)
     farm = Farm("wheat", 1, 6, 3, 1, 1, (0, 6))
-    grana = Granary(41, 6, 2, 1, 1, (41, 6))
+    grana = Granary(39, 5, 2, 1, 1, (41, 6))
     map_build.add_build(grana)
     map_build.add_build(farm)
     map_build.add_build(road)
@@ -57,7 +57,7 @@ class Logic_main:
                     map_char.remove_character(char)
                 print(char.positionX + char.positionY)
             elif isinstance(char, Delivery):
-                if char.move():
+                if char.move(map_build):
                     map_char.remove_character(char)
             else:
                 char.move()
@@ -67,6 +67,7 @@ class Logic_main:
                     map_build.map[i][j].check_update(map_char, map_build)
         print(char.positionX, char.positionY)
         print(map_char.list)
+        print("Food : ", map_build.map[39][5].stock)
         Percy_Weasley.anti_johnny(map_build)
         time.sleep(1)
     # while 1:

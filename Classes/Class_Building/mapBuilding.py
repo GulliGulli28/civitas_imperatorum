@@ -27,7 +27,7 @@ class mapBuilding:
         self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
         self.graph = {}
         self.graph_assoc = {}
-        self.listGranary = None
+        self.listGranary = []
         self.resident = 0
         self.unemployed = 0
 
@@ -37,17 +37,26 @@ class mapBuilding:
             for i in range(new_build.size):  # check that there is a road next to the building
                 for y in range(new_build.size):
                     pos = self.get_direction(new_build.positionX + i, new_build.positionY + y)
-                    if len(pos) > 0:
+                    print("pos =")
+                    if len(pos) > 0 and road_near is False:
                         road_near = True
-                        new_build.road = (new_build.positionX + i, new_build.positionY + y) + pos[0]
+                        (a, b) = pos[0]
+                        print("posX :", new_build.positionX, " posY :", new_build.positionY, " i :", i, " y :", y,
+                              " a :", a, " b :", b)
+                        new_build.road = (new_build.positionX + i + a, new_build.positionY + y + b)
                     pos = self.get_direction(new_build.positionX + y, new_build.positionY + i)
-                    if len(pos) > 0:
+                    if len(pos) > 0 and road_near is False:
                         road_near = True
-                        new_build.road = (new_build.positionX + y, new_build.positionY + i) + pos[0]
+                        print(pos[0])
+                        (a, b) = pos[0]
+                        new_build.road = (new_build.positionX + y + a, new_build.positionY + i + b)
             if not road_near:
                 return 0
         if isinstance(new_build, Granary):
             self.listGranary.append(new_build)
+            self.update_graph(new_build.road)
+        if isinstance(new_build, Farm):
+            self.update_graph(new_build.road)
         self.map[new_build.positionX][new_build.positionY] = new_build
         if new_build.size > 1:
             for i in range(new_build.size):
@@ -105,7 +114,7 @@ class mapBuilding:
         else:
             (x, y) = pos
             direct = self.get_direction(x, y)
-            if len(direct) > 1:
+            if len(direct) != 2 and len(direct) != 0:
                 for i in direct:
                     (pos2, distance, last_dir) = self.calculate_distance(pos, i)
                     self.graph_assoc[pos] = {pos2, i}
@@ -239,7 +248,6 @@ class mapBuilding:
     # end = 'D'
     # path, cost = dijkstra(graph, start, end)
     # print(f'Le chemin le plus court entre {start} et {end} est {path} avec comme cout {cost}')
-
 
 # truc = mapBuilding()
 # road1 = (0, 0)

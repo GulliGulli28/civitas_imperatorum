@@ -1,3 +1,4 @@
+import math
 import time
 
 from Classes.Class_Building.Building import Building
@@ -27,15 +28,22 @@ class Farm(Building):
         :return: None
         """
         current_time = time.time()
-        if current_time - self.last_production_time >= 30:
+        best_cost = math.inf
+        if current_time - self.last_production_time >= 5:
             self.last_production_time = current_time
             for granary in mapBuilding.listGranary:
-                cost, path = mapBuilding.dijkstra(mapBuilding.map, (self.positionX, self.positionY), (granary.positionX, granary.positionY))
-                if path < best_path | best_path is None:
+                print(granary.road)
+                (x, y) = granary.road
+                path, cost = mapBuilding.dijkstra(mapBuilding.graph, (self.positionX, self.positionY), (x, y))
+                if cost < best_cost:
+
+                    best_cost = cost
                     best_path = path
                     best_gra = granary
+            print("The best path is ", best_path)
             pathing = mapBuilding.contruct_entire_path(best_path)
-            (x, y) = (self.road.positionX, self.road.positionY)
+            print("The best entire path is ", pathing)
+            (x, y) = self.road
             mapCharacter.add_character(
-                Delivery(x, y, self.direction, pathing))
-            best_gra.add_food(self.productivity)
+                Delivery(x, y, pathing, best_gra))
+

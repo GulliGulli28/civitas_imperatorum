@@ -3,7 +3,7 @@ from Classes.Class_Building.Building import Building
 
 class Granary(Building):
     stockMax = 2600
-    stock = None
+    stock = 0
 
     def __init__(self, positionX, positionY, size, capacity, price, idi):
         self.stockMax = 2600
