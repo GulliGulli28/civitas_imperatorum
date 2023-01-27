@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 from world import World
+from people import people
 from settings import TILE_SIZE
 from utils import draw_text
 from camera import Camera
@@ -24,6 +25,8 @@ class Image():
         cv2.imwrite(self.path + "_r" + self.extension, cv2.resize(image, (height, width)))
         assert isinstance(self.extension, object)
         self.image = pg.image.load(self.path + "_r" + self.extension)
+
+
 
 class Game:
     #pg.font.init()
@@ -49,7 +52,7 @@ class Game:
         self.width, self.height = self.screen.get_size()
 
         # world
-        self.world = World(30, 30, self.width, self.height)
+        self.world = World(50,50 , self.width, self.height)
 
         # camera
         self.camera = Camera(self.width, self.height)
@@ -57,11 +60,14 @@ class Game:
         # hud
         self.hud = Hud(self.width, self.height)
 
+        #people
+        self.people = people(self.world)
+
 
     def run(self):
         #pg.init()
         self.playing = True
-        while self.playing:
+        while self.playing:            
             self.clock.tick(60)
             self.events()
             self.update()
@@ -69,6 +75,9 @@ class Game:
             self.menu()
             #self.draw()
 
+            #self.draw()
+            self.music()
+            
     def events(self):
         mouse_pos = pg.mouse.get_pos()
         mouse_pressed = pg.mouse.get_pressed()
@@ -83,35 +92,15 @@ class Game:
 
     def update(self):
         self.camera.update()
+        self.hud.update()
+        self.world.update(self.hud,self.camera)
+        self.people.update()
 
 
 
     def draw(self):
-        self.screen.fill((0, 0, 0))
-
-        self.screen.blit(self.world.grass_tiles, (self.camera.scroll.x, self.camera.scroll.y))
-
-        for x in range(self.world.grid_length_x):
-            for y in range(self.world.grid_length_y):
-
-                # sq = self.world.world[x][y]["cart_rect"]
-                # rect = pg.Rect(sq[0][0], sq[0][1], TILE_SIZE, TILE_SIZE)
-                # pg.draw.rect(self.screen, (0, 0, 255), rect, 1)
-
-                render_pos =  self.world.world[x][y]["render_pos"]
-                #self.screen.blit(self.world.tiles["block"], (render_pos[0] + self.width/2, render_pos[1] + self.height/4))
-
-                tile = self.world.world[x][y]["tile"]
-
-                if tile != "":
-                    self.screen.blit(self.world.tiles[tile],
-                                    (render_pos[0] + self.world.grass_tiles.get_width()/2 + self.camera.scroll.x,
-                                     render_pos[1] - (self.world.tiles[tile].get_height() - TILE_SIZE) + self.camera.scroll.y))
-
-                # p = self.world.world[x][y]["iso_poly"]
-                # p = [(x + self.width/2, y + self.height/4) for x, y in p]
-                # pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
-
+        self.world.draw(self.screen,self.camera)
+        self.people.draw(self.screen,self.camera)
         self.hud.draw(self.screen)
         draw_text(
             self.screen,
@@ -120,6 +109,7 @@ class Game:
             (255, 255, 255),
             (10, 10)
         )
+
 
         pg.display.flip()
 
@@ -239,3 +229,24 @@ class Game:
                         self.screen.blit(bg.image, (0, 0))
                         pg.display.flip()
                         menu = True
+
+
+              #  p = self.world.world[x][y]["iso_poly"]
+               # p = [(x + self.width/2, y + self.height/4) for x, y in p]
+                #pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
+           
+
+        pg.display.flip()
+
+        
+                
+        def music(self):
+            pass
+            '''
+                if pg.mixer.music.get_busy():
+                    pass
+                else:
+                    pg.mixer.music.load("Time_Time.mp3")
+                    pg.mixer.music.play()
+            '''
+

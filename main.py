@@ -1,7 +1,11 @@
-import pygame, cv2
+import pygame
+from interface import draw_background
 
 pygame.init()
+from Classes.Class_Building import Building
 
+bat= Building(10,20,(2,3),2,10,"coucou") 
+"""
 # création fenêtre
 screen_height = 1500
 screen_width = 800
@@ -40,19 +44,7 @@ class Image():
 bg = Image("C3_sprites/C3/C3title_00001", ".png")
 
 
-#new_game = Image("new_game", ".png")
-#load_game = Image("load_game", ".png")
-
-#click_button = Image("click" ,".png" )
-#load_game.resize(400, 200)
-load_game=pygame.transform.scale(load_game,(300,50))
-load_game_rect=load_game.get_rect()
-new_game=pygame.transform.scale(new_game,(300,50))
-new_game_rect=new_game.get_rect()
-save_game=pygame.transform.scale(save_game,(300,50))
-save_game_rect=save_game.get_rect()
-
-"""class Button():
+class Button(pygame.sprite.Sprite):
 
     def __init__(self, x, y, button, scale):
         width = button.image.get_width()
@@ -62,24 +54,16 @@ save_game_rect=save_game.get_rect()
         self.rect.topleft = (x,y)
         self.x = x
         self.y = y
-        self.clicked = False
-
-    def draw(self, surface):
-        action = False
-        #position de la souris
-        pos = pygame.mouse.get_pos()
-        #verifier les conditions du clicked
-        if self.rect.collidepoint(pos):
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False :
-                self.clicked = True
-                action = True
+        self.rect = pygame.Rect(x, y, width*scale, height*scale)
 
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
         # dessin du bouton sur l'écran
         surface.blit(self.resized, (self.rect.x, self.rect.y))
 
-        return action """
+        return action 
+        
+
 #initialiser la variable menu
 menu = False
 def bouton(panel, mouse):
@@ -140,6 +124,9 @@ def menu1():
 # Boucle de jeu
 running = True
 #c = 0
+c = 0
+menuMode = False
+gameMode = False
 
 bg.resize(screen_height, screen_width)
 screen.blit(bg.image, (0, 0))
@@ -156,15 +143,29 @@ while running:
         if menu == True :
             menu1()
         if event.type == pygame.QUIT:
-            running = False
-            pygame.quit()
-            print("fermeture du jeu")
-        elif event.type == pygame.MOUSEBUTTONDOWN :
-            bg = Image("C3_sprites/C3/0_fired_00001", ".png")
-            bg.resize(screen_height, screen_width)
-            screen.blit(bg.image, (0, 0))
-            pygame.display.flip()
-            menu = True
+            running = 0
+        elif not menuMode:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                menuMode = True
+                bg = Image("C3_sprites/C3/0_fired_00001", ".png")
+                bg.resize(screen_height, screen_width)
+                screen.blit(bg.image, (0, 0))
+                NG_button.draw()
+                LG_button.draw()
+                pygame.display.flip()
+        elif  not gameMode:
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1: # 1 = left_click
+                pos = pygame.mouse.get_pos()
+                if pygame.Rect.collidepoint(LG_button.rect,pos):
+                    print("Load game clicked")
+                    #faire Load game ici
+                if pygame.Rect.collidepoint(NG_button.rect,pos):
+                    #print("New game clicked")
+                    gameMode = True
+        elif gameMode:
+            draw_background(screen,screen_width,screen_height)
+      # mise à jour de l'interface
+"""
 
 
 
