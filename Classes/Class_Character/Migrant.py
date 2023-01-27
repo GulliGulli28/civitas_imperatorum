@@ -5,17 +5,21 @@ class Migrant(Character):
 
     def __init__(self, positionX, positionY, dest):
         super().__init__(positionX, positionY, (0, 1))
+        self.name = "migrant"
         self.dest = dest
+        self.is_there = False
+
+    def update(self):
+        if not self.is_there:
+            self.move
 
     def move(self):
         (x, y) = self.dest
         if x != self.positionX:
             self.positionX += 1
-            return False
         if y < self.positionY:
             self.positionY -= 1
         elif y > self.positionY:
             self.positionY += 1
-            return False
         else:
-            return True
+            self.is_there = True

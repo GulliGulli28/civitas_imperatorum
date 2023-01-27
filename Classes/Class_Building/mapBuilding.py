@@ -34,6 +34,12 @@ class mapBuilding:
         for y in range(self.sizeY):
             self.map[25][y] = factory(BUILDING_TYPE.ROAD,25,y,y)
             self.update_graph((25,y))
+        
+    def update(self):
+        for map in self.map:
+            for building in map:
+                if building is not None:
+                    building.check_update()
 
     def add_build(self, new_build):
         road_near = False
@@ -46,6 +52,8 @@ class mapBuilding:
                         road_near = True
             if not road_near:
                 return 0
+        if self.map[new_build.positionX][new_build.positionY] is not None: #check if it already has a building
+            return 0
         if isinstance(new_build, Granary):
             self.listGranary.append(new_build)
         self.map[new_build.positionX][new_build.positionY] = new_build

@@ -29,6 +29,7 @@ class Building(ABC):  # hérite de ABC
         self.destruction_risk = 0
         self.last_update = time.time()
         self.level = 0
+        self.is_new = True
         self.is_on_fire = False
         # dictionnaire_building = {}
         # compteur = 0
@@ -69,6 +70,8 @@ class Building(ABC):  # hérite de ABC
         current_time = time.time()
         if current_time - self.last_update >= 30:
             self.last_update = current_time
+            if self.is_new:
+                self.is_new = False
             self.update_risk()
 
     def update_level(self, level):

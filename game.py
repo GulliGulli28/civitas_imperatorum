@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 from world import World
+from people import people
 from settings import TILE_SIZE
 from utils import draw_text
 from camera import Camera
@@ -23,6 +24,10 @@ class Game:
 
         # hud
         self.hud = Hud(self.width, self.height)
+
+        #people
+        self.people = people(self.world)
+
 
     def run(self):
         self.playing = True
@@ -47,9 +52,11 @@ class Game:
         self.camera.update()
         self.hud.update()
         self.world.update(self.hud,self.camera)
+        self.people.update()
 
     def draw(self):
         self.world.draw(self.screen,self.camera)
+        self.people.draw(self.screen,self.camera)
         self.hud.draw(self.screen)
         draw_text(
             self.screen,

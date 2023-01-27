@@ -88,6 +88,7 @@ class World:
 
         if self.temp_tile is not None:
             render_pos = self.temp_tile["render_pos"]
+            grid_pos = self.temp_tile["grid"]
             poly = self.temp_tile["iso_poly"]
             poly = [(x + self.width - TILE_SIZE + camera.scroll.x, y + camera.scroll.y) for x, y in poly]
             screen.blit(self.temp_tile["image"],
@@ -96,7 +97,7 @@ class World:
             if self.temp_tile["tile"] == "clear":
                 pg.draw.polygon(screen, (255, 0, 0), poly, 1)
             else:
-                if self.is_placeable(self.temp_tile["grid"]):
+                if self.is_placeable(self.temp_tile["grid"]) and self.map_building.map[grid_pos[0]][grid_pos[1]] is None:
                     pg.draw.polygon(screen, (0, 255, 0), poly, 1)
                 else:
                     pg.draw.polygon(screen, (255, 0, 0), poly, 1)
@@ -250,6 +251,7 @@ class World:
 
     def remove_buiding(self, grid_pos):
         self.world[grid_pos[0]][grid_pos[1]]["tile"] = ""
+        self.map_building.remove_build(grid_pos[0],grid_pos[1])
         self.temp_tile = None
 
 
