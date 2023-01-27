@@ -76,7 +76,7 @@ class Game:
             #self.draw()
 
             #self.draw()
-            self.music()
+            #self.music()
             
     def events(self):
         mouse_pos = pg.mouse.get_pos()
@@ -192,7 +192,7 @@ class Game:
                             print("fermeture du jeu")
                         elif bouton(new_game_rect, mouse):
                             while self.playing:
-                                self.clock.tick(60)
+                                self.clock.tick(20)
                                 self.events()
                                 self.update()
                                 self.draw()

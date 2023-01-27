@@ -68,10 +68,10 @@ class Building(ABC):  # hérite de ABC
                 print("Toujours debout")
     def check_update(self):
         current_time = time.time()
+        if self.is_new:
+            self.is_new = False
         if current_time - self.last_update >= 30:
             self.last_update = current_time
-            if self.is_new:
-                self.is_new = False
             self.update_risk()
 
     def update_level(self, level):
