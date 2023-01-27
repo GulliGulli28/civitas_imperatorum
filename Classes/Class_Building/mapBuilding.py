@@ -18,7 +18,7 @@ class mapBuilding:
     def __init__(self):
         self.sizeX = 50
         self.sizeY = 50
-        self.map = [[None for j in range(self.sizeY)] for i in range(self.sizeX)]
+        self.map = [[None for j in range(self.sizeY+1)] for i in range(self.sizeX+1)]
         for j in range(self.sizeY):
             self.map[25][j] = Road(25,j)
         self.graph = {}
