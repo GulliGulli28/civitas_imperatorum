@@ -25,6 +25,8 @@ class Image():
         assert isinstance(self.extension, object)
         self.image = pg.image.load(self.path + "_r" + self.extension)
 
+
+
 class Game:
     #pg.font.init()
     new_game = pg.image.load("graphics/paneling/Picture1.png")
@@ -49,7 +51,7 @@ class Game:
         self.width, self.height = self.screen.get_size()
 
         # world
-        self.world = World(30, 30, self.width, self.height)
+        self.world = World(50,50 , self.width, self.height)
 
         # camera
         self.camera = Camera(self.width, self.height)
@@ -61,13 +63,11 @@ class Game:
     def run(self):
         #pg.init()
         self.playing = True
-        while self.playing:
+        while self.playing:            
             self.clock.tick(60)
             self.events()
             self.update()
-
-            self.menu()
-            #self.draw()
+            self.draw()
 
     def events(self):
         mouse_pos = pg.mouse.get_pos()
@@ -83,6 +83,8 @@ class Game:
 
     def update(self):
         self.camera.update()
+        self.hud.update()
+        self.world.update(self.hud,self.camera)
 
 
 
@@ -112,6 +114,7 @@ class Game:
                 # p = [(x + self.width/2, y + self.height/4) for x, y in p]
                 # pg.draw.polygon(self.screen, (255, 0, 0), p, 1)
 
+        self.world.draw(self.screen,self.camera)
         self.hud.draw(self.screen)
         draw_text(
             self.screen,
