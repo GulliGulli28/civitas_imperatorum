@@ -20,9 +20,10 @@ class mapCharacter:
                 if building is not None:
                     pass
         for character in self.list:
-            character.update()
             if character.is_there:
+                print("destination reached")
                 self.remove_character(character)
+            character.update()
 
     def new_character(self,name,positionX,positionY, dest):
         type = type_of_character(name)

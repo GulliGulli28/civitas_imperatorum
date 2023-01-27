@@ -8,18 +8,28 @@ class Migrant(Character):
         self.name = "migrant"
         self.dest = dest
         self.is_there = False
+        print("starting at")
+        print((str)(self.positionX) + " ," + (str)(self.positionY))
 
     def update(self):
         if not self.is_there:
-            self.move
+            print("I'm at")
+            print(self.positionX)
+            print(self.positionY)
+            self.move()
 
     def move(self):
-        (x, y) = self.dest
-        if x != self.positionX:
-            self.positionX += 1
-        if y < self.positionY:
-            self.positionY -= 1
-        elif y > self.positionY:
-            self.positionY += 1
-        else:
-            self.is_there = True
+            (x, y) = self.dest
+            if x < self.positionX:
+                self.positionX -= 1
+            elif x > self.positionX:
+                self.positionX += 1
+            if y < self.positionY:
+                self.positionY -= 1
+            elif y > self.positionY:
+                self.positionY += 1
+                self.is_there = False
+                return False
+            else:
+                self.is_there = True
+                return True
