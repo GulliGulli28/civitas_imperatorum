@@ -9,9 +9,10 @@ class Migrant(Character):
 
     def move(self):
         (x, y) = self.dest
-        if x != self.positionX:
+        if x < self.positionX:
+            self.positionX -= 1
+        elif x > self.positionX:
             self.positionX += 1
-            return False
         if y < self.positionY:
             self.positionY -= 1
         elif y > self.positionY:

@@ -29,6 +29,7 @@ class Building(ABC):  # hérite de ABC
         self.name = None
         self.level = 0
         self.is_on_fire = False
+        self.road = None
         # dictionnaire_building = {}
         # compteur = 0
         # type_building = ""
@@ -64,7 +65,7 @@ class Building(ABC):  # hérite de ABC
                 print("le batiment est maintenant en feu")
             else:
                 print("Toujours debout")
-    def check_update(self):
+    def check_update(self, map_char, map_build):
         current_time = time.time()
         if current_time - self.last_update >= 30:
             self.last_update = current_time

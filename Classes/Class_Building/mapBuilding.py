@@ -36,10 +36,14 @@ class mapBuilding:
         if not (isinstance(new_build, Road)):
             for i in range(new_build.size):  # check that there is a road next to the building
                 for y in range(new_build.size):
-                    if len(self.get_direction(new_build.positionX + i, new_build.positionY + y)) > 0:
+                    pos = self.get_direction(new_build.positionX + i, new_build.positionY + y)
+                    if len(pos) > 0:
                         road_near = True
-                    if len(self.get_direction(new_build.positionX + y, new_build.positionY + i)) > 0:
+                        new_build.road = (new_build.positionX + i, new_build.positionY + y) + pos[0]
+                    pos = self.get_direction(new_build.positionX + y, new_build.positionY + i)
+                    if len(pos) > 0:
                         road_near = True
+                        new_build.road = (new_build.positionX + y, new_build.positionY + i) + pos[0]
             if not road_near:
                 return 0
         if isinstance(new_build, Granary):
@@ -237,19 +241,19 @@ class mapBuilding:
     # print(f'Le chemin le plus court entre {start} et {end} est {path} avec comme cout {cost}')
 
 
-truc = mapBuilding()
-road1 = (0, 0)
-road2 = (0, 0)
-for i in range(100):
-    x = random.randint(1, 10)
-    y = random.randint(1, 10)
-    if road1 == (0, 0):
-        road1 = (x, y)
-    elif road2 == (0, 0):
-        road2 = (x, y)
-    road = Road(x, y)
-    truc.add_build(road)
-# print(truc.map)
-print(truc.graph)
-path = truc.dijkstra(truc.graph, road1, road2)
-truc.contruct_entire_path(path)
+# truc = mapBuilding()
+# road1 = (0, 0)
+# road2 = (0, 0)
+# for i in range(100):
+#     x = random.randint(1, 10)
+#     y = random.randint(1, 10)
+#     if road1 == (0, 0):
+#         road1 = (x, y)
+#     elif road2 == (0, 0):
+#         road2 = (x, y)
+#     road = Road(x, y)
+#     truc.add_build(road)
+# # print(truc.map)
+# print(truc.graph)
+# path = truc.dijkstra(truc.graph, road1, road2)
+# truc.contruct_entire_path(path)

@@ -1,3 +1,4 @@
+from Classes.Class_Building.Building import Building
 from Classes.Class_Character.Worker import Worker
 from Classes.Class_Building.mapBuilding import mapBuilding
 
