@@ -24,7 +24,11 @@ class Logic_main:
     print(map_build.map)
     house = House(1, 1, 1, 1, 1, 1)
     map_build.add_build(house)
-    migr = Migrant(0, 0, (0, 1))
+    road = Road(40 ,45)
+    house = House(40, 46, 1, 1, 1, 1)
+
+    map_build.add_build(road)
+    migr = Migrant(0, 20, (40, 46))
     map_char.add_character(migr)
     false = True
     while false:
@@ -39,6 +43,7 @@ class Logic_main:
 
             else:
                 char.move()
+        print(char.positionX, char.positionY)
         print(map_char.list)
         Percy_Weasley.anti_johnny(map_build)
         time.sleep(1)
