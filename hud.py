@@ -109,7 +109,7 @@ class Hud:
         overlays_case = pg.image.load("graphics/paneling/overlays_case.png").convert_alpha()
         
         clear = pg.image.load("graphics/shovel.png").convert_alpha()
-        road = pg.image.load("graphics/Land2a_00095.png").convert_alpha()
+        road = pg.image.load("graphics/Land2a_00081.png").convert_alpha()
         house = pg.image.load("graphics/housing.png").convert_alpha()
         well = pg.image.load("graphics/well.png").convert_alpha()
         senate = pg.image.load("graphics/senate.png").convert_alpha()
