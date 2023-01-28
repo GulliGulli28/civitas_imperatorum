@@ -39,12 +39,14 @@ class Character(ABC):
         else:
             self.sprite_in_list += 1
         """
-        direction_possible = map_build.get_direction()(self.positionX, self.positionY)
-        if len(direction_possible) < 2:
-            direction_possible = random.choice(direction_possible)
+        direction_possible = map_build.get_direction(self.positionX, self.positionY)
+        if len(direction_possible) > 2 or len(direction_possible)==2 and self.direction not in direction_possible:
+            chosen_direction = random.choice(direction_possible)
         elif len(direction_possible) == 2:
-            del direction_possible[self.direction]
-        (x, y) = direction_possible
+            chosen_direction = self.direction
+        else:
+            chosen_direction = direction_possible[0]
+        (x, y) = chosen_direction
         self.positionX += x
         self.positionY += y
         self.direction = (-x, -y)  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move

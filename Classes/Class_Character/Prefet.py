@@ -7,9 +7,13 @@ class Prefet(Worker):
         super().__init__(positionX, positionY, direction)
 
 
-    def anti_johnny(self, mapbuilding):
-        for i in mapbuilding.map:
-            if isinstance(i, Building):
-                if i.is_on_fire:
-                    print("damn")
+    def checkfire(self, mapbuilding):
+        for i in range(mapbuilding.sizeX):
+            for j in range(mapbuilding.sizeY):
+                if isinstance(mapbuilding.map[i][j], Building):
+                    if abs(self.positionX - mapbuilding.map[i][j].positionX)<=3 and abs(self.positionY - mapbuilding.map[i][j].positionY)<=3:
+                        mapbuilding.map[i][j].is_on_fire =False
+                        mapbuilding.map[i][j].fire_risk =0
+                    else:
+                        self.move(mapbuilding)
 

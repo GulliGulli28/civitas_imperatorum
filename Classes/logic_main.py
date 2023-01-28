@@ -68,7 +68,7 @@ class Logic_main:
         print(char.positionX, char.positionY)
         print(map_char.list)
         print("Food : ", map_build.map[39][5].stock)
-        Percy_Weasley.anti_johnny(map_build)
+        Percy_Weasley.checkfire(map_build)
         time.sleep(1)
     # while 1:
     #     for build_list in map_build.map:
