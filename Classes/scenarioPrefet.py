@@ -15,7 +15,7 @@ from Classes.Class_Character.Resident import Resident
 
 
 
-class ScenarioBatimentenFeu:
+class ScenarioPrefet:
     def __init__(self, resident, money):
         self.resident = resident
         self.money = money
@@ -28,18 +28,20 @@ class ScenarioBatimentenFeu:
     for i in range(0,40):
         road = Road(1, i)
         map_build.add_build(road)
-        house=House(0,i,1,1,1,1)
+        house=House(0,i,1,)
         map_build.add_build(house)
         house.is_on_fire = True
         house.fire_risk =0.2
 
-    print(map_build.map)
+    print("Maisons placés sur toute la ligne 0")
+    print("routes créer sur toute la ligne 1")
     print("le prefet est ici",prefet.positionX, prefet.positionY)
     for i in range(0,40):
-        print("le batiment",0,i, "est maintenant",map_build.map[0][i].is_on_fire)
-        prefet.checkfire(map_build)
-        print("le prefet est maintenant ici:",prefet.positionX, prefet.positionY)
-        print("Le batiment",0,i, "est en feu: ",map_build.map[0][i].is_on_fire)
+        print("Le batiment à la position", map_build.map[0][i].positionX, map_build.map[0][i].positionY, "est en feu", map_build.map[0][i].is_on_fire )
 
+    prefet.checkfire(map_build)
     prefet.move(map_build)
     print("le prefet est maintenant ici:",prefet.positionX, prefet.positionY)
+
+    for i in range(0,40):
+        print("Le batiment à la position", map_build.map[0][i].positionX, map_build.map[0][i].positionY, "est en feu", map_build.map[0][i].is_on_fire )
