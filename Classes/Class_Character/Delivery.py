@@ -18,6 +18,5 @@ class Delivery(Character):
             del self.dest[0]
             return False
         else:
-            print("JE SUIS ARRIVÉ A DESTINATION !!!!! OUAIS !!!!!")
             map_build.map[self.gra.positionX][self.gra.positionY].add_food(50)
             return True

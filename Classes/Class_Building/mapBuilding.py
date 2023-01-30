@@ -69,9 +69,6 @@ class mapBuilding:
         if isinstance(new_build, Road):
             pos = (new_build.positionX, new_build.positionY)
             self.update_graph(pos)
-        elif isinstance(new_build, House):
-            # game.add_resident(5)
-            pass
 
     def get_direction(self, positionX, positionY):
         """
@@ -114,9 +111,11 @@ class mapBuilding:
         else:
             (x, y) = pos
             direct = self.get_direction(x, y)
-            if len(direct) != 2 and len(direct) != 0:
+            if len(direct) != 0:
                 for i in direct:
                     (pos2, distance, last_dir) = self.calculate_distance(pos, i)
+                    # print("calculate_distance")
+                    # print(pos, pos2, distance)
                     self.graph_assoc[pos] = {pos2, i}
                     self.graph_assoc[pos2] = {pos, last_dir}
                     self.add_dist2graph(pos, pos2, distance)
@@ -145,10 +144,11 @@ class mapBuilding:
             distance += 1
             (x, y) = pos
             direct = self.get_direction(x, y)
+
             if len(direct) == 2:
                 direct.remove(tuple(map(lambda a, b: a - b, old_pos, pos)))
                 i = direct[0]
-            elif len(self.get_direction(x, y)) != 2:
+            else:
                 pos2 = pos
                 stop = True
         return pos2, distance, i

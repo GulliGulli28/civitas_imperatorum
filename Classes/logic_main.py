@@ -10,6 +10,8 @@ from Classes.Class_Character.Migrant import Migrant
 from Classes.Class_Character.Prefet import Prefet
 import time
 
+from Classes.Class_Character.Resident import Resident
+
 
 class Logic_main:
     def __init__(self, resident, money):
@@ -35,16 +37,24 @@ class Logic_main:
         road = Road(i, 20)
         map_build.add_build(road)
     print(map_build.map)
+    print("Voici le graph\n", map_build.graph)
     house = House(1, 1, 1, 1, 1, 1)
     map_build.add_build(house)
     road = Road(40, 45)
-    house = House(40, 46, 1, 1, 1, 1)
+    house = House(39, 21, 1, 1, 1, 1)
+    map_build.add_build(road)
+    map_build.add_build(house)
     farm = Farm("wheat", 1, 6, 3, 1, 1, (0, 6))
-    grana = Granary(39, 5, 2, 1, 1, (41, 6))
+    grana = Granary(1, 39, 1, 1, 1, (41, 6), (0, 39))
+    for i in range(0, 40):
+        for j in range(0, 40):
+            if not (map_build.map[i][j] is None):
+                if isinstance(map_build.map[i][j], Road):
+                    map_build.update_graph((i, j))
     map_build.add_build(grana)
     map_build.add_build(farm)
     map_build.add_build(road)
-    migr = Migrant(0, 20, (40, 46))
+    migr = Migrant(0, 20, (39, 21))
     map_char.add_character(migr)
     false = True
     while false:
@@ -55,19 +65,23 @@ class Logic_main:
             if isinstance(char, Migrant):
                 if char.move():
                     map_char.remove_character(char)
+                    print("migrant = ", char.positionX, char.positionY)
+                    map_build.map[char.positionX][char.positionY].update_level(1, map_char)
                 print(char.positionX + char.positionY)
             elif isinstance(char, Delivery):
                 if char.move(map_build):
                     map_char.remove_character(char)
+            elif isinstance(char, Resident):
+                print("Resident X", char.positionX, "Resident Y", char.positionY)
             else:
                 char.move()
         for i in range(0, 40):
             for j in range(0, 40):
-                if not(map_build.map[i][j] is None):
+                if not (map_build.map[i][j] is None):
                     map_build.map[i][j].check_update(map_char, map_build)
         print(char.positionX, char.positionY)
         print(map_char.list)
-        print("Food : ", map_build.map[39][5].stock)
+        print("Food : ", map_build.map[1][39].stock)
         Percy_Weasley.checkfire(map_build)
         time.sleep(1)
     # while 1:

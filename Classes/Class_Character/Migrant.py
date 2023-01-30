@@ -8,15 +8,17 @@ class Migrant(Character):
         self.dest = dest
 
     def move(self):
-        (x, y) = self.dest
-        if x < self.positionX:
-            self.positionX -= 1
-        elif x > self.positionX:
-            self.positionX += 1
-        if y < self.positionY:
-            self.positionY -= 1
-        elif y > self.positionY:
-            self.positionY += 1
-            return False
-        else:
-            return True
+            (x, y) = self.dest
+            if x < self.positionX:
+                self.positionX -= 1
+            elif x > self.positionX:
+                self.positionX += 1
+            if y < self.positionY:
+                self.positionY -= 1
+            elif y > self.positionY:
+                self.positionY += 1
+                self.is_there = False
+                return False
+            elif x == self.positionX and y == self.positionY:
+                self.is_there = True
+                return True
