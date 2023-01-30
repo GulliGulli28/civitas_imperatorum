@@ -10,6 +10,12 @@ from Classes.Class_Character.Prefet import Prefet
 
 
 class mapCharacter:
+    _instance = None
+
+    def __new__(cls):
+        if mapCharacter._instance is None:
+            mapCharacter._instance = super().__new__(cls)
+        return mapCharacter._instance
 
     def __init__(self):
         self.list = []

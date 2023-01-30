@@ -40,7 +40,7 @@ class Character(ABC):
             self.sprite_in_list += 1
         """
         direction_possible = map_build.get_direction(self.positionX, self.positionY)
-        if len(direction_possible) > 2 or len(direction_possible)==2 and self.direction not in direction_possible:
+        if len(direction_possible) > 2 or (len(direction_possible)==2 and self.direction not in direction_possible):
             chosen_direction = random.choice(direction_possible)
         elif len(direction_possible) == 2:
             chosen_direction = self.direction
@@ -49,7 +49,7 @@ class Character(ABC):
         (x, y) = chosen_direction
         self.positionX += x
         self.positionY += y
-        self.direction = (-x, -y)  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move
+        self.direction = chosen_direction  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move
         # l'ancienne position
 
     def update_health(self, newHealth):

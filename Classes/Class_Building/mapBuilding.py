@@ -28,7 +28,7 @@ class mapBuilding:
         self.map = [[None for j in range(self.sizeY+1)] for i in range(self.sizeX+1)]
         self.graph = {}
         self.graph_assoc = {}
-        self.listGranary = None
+        self.listGranary = []
         self.resident = 0
         self.unemployed = 0
         for y in range(self.sizeY):
@@ -46,16 +46,29 @@ class mapBuilding:
         if not (isinstance(new_build, Road)):
             for i in range(new_build.size):  # check that there is a road next to the building
                 for y in range(new_build.size):
-                    if len(self.get_direction(new_build.positionX + i, new_build.positionY + y)) > 0:
+                    pos = self.get_direction(new_build.positionX + i, new_build.positionY + y)
+                    print("pos =")
+                    if len(pos) > 0 and road_near is False:
                         road_near = True
-                    if len(self.get_direction(new_build.positionX + y, new_build.positionY + i)) > 0:
+                        (a, b) = pos[0]
+                        print("posX :", new_build.positionX, " posY :", new_build.positionY, " i :", i, " y :", y,
+                              " a :", a, " b :", b)
+                        new_build.road = (new_build.positionX + i + a, new_build.positionY + y + b)
+                    pos = self.get_direction(new_build.positionX + y, new_build.positionY + i)
+                    if len(pos) > 0 and road_near is False:
                         road_near = True
+                        print(pos[0])
+                        (a, b) = pos[0]
+                        new_build.road = (new_build.positionX + y + a, new_build.positionY + i + b)
             if not road_near:
                 return 0
         if self.map[new_build.positionX][new_build.positionY] is not None: #check if it already has a building
             return 0
         if isinstance(new_build, Granary):
             self.listGranary.append(new_build)
+            self.update_graph(new_build.road)
+        if isinstance(new_build, Farm):
+            self.update_graph(new_build.road)
         self.map[new_build.positionX][new_build.positionY] = new_build
         if new_build.size > 1:
             for i in range(new_build.size):
@@ -68,6 +81,7 @@ class mapBuilding:
         if isinstance(new_build, Road):
             pos = (new_build.positionX, new_build.positionY)
             self.update_graph(pos)
+<<<<<<< HEAD
         elif isinstance(new_build, House):
             # game.add_resident(5)
             pass
@@ -75,6 +89,8 @@ class mapBuilding:
         type = type_of_building(name)
         new_build = factory(type,positionX,positionY,1)
         self.add_build(new_build)
+=======
+>>>>>>> Quentin/Guillaume
 
     def remove_build(self,positionX,positionY):
         build = self.map[positionX][positionY]
@@ -126,9 +142,11 @@ class mapBuilding:
         else:
             (x, y) = pos
             direct = self.get_direction(x, y)
-            if len(direct) > 1:
+            if len(direct) != 0:
                 for i in direct:
                     (pos2, distance, last_dir) = self.calculate_distance(pos, i)
+                    # print("calculate_distance")
+                    # print(pos, pos2, distance)
                     self.graph_assoc[pos] = {pos2, i}
                     self.graph_assoc[pos2] = {pos, last_dir}
                     self.add_dist2graph(pos, pos2, distance)
@@ -160,10 +178,11 @@ class mapBuilding:
             distance += 1
             (x, y) = pos
             direct = self.get_direction(x, y)
+
             if len(direct) == 2:
                 direct.remove(tuple(map(lambda a, b: a - b, old_pos, pos)))
                 i = direct[0]
-            elif len(self.get_direction(x, y)) != 2:
+            else:
                 pos2 = pos
                 stop = True
         return pos2, distance, i
@@ -263,6 +282,7 @@ class mapBuilding:
     # path = dijkstra(graph, start, end)
     # print(f'Le chemin le plus court entre {start} et {end} est {path}')
 
+<<<<<<< HEAD
 
 def type_of_building(name):
     match name:
@@ -319,3 +339,21 @@ for i in range(40):
 print(truc.map)
 print(truc.graph)
 '''
+=======
+# truc = mapBuilding()
+# road1 = (0, 0)
+# road2 = (0, 0)
+# for i in range(100):
+#     x = random.randint(1, 10)
+#     y = random.randint(1, 10)
+#     if road1 == (0, 0):
+#         road1 = (x, y)
+#     elif road2 == (0, 0):
+#         road2 = (x, y)
+#     road = Road(x, y)
+#     truc.add_build(road)
+# # print(truc.map)
+# print(truc.graph)
+# path = truc.dijkstra(truc.graph, road1, road2)
+# truc.contruct_entire_path(path)
+>>>>>>> Quentin/Guillaume
