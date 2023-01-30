@@ -57,15 +57,11 @@ class Building(ABC):  # hérite de ABC
         self.destruction_risk += 1
 
     def risque_feu(self):
-        if self.is_on_fire:
-            print("le batiment est en feu")
-        else:
+        if self.is_on_fire ==False:
             x= random.random()*100
             if x<self.fire_risk*100:
                 self.is_on_fire = True
                 print("le batiment est maintenant en feu")
-            else:
-                print("Toujours debout")
     def check_update(self, map_char, map_build):
         current_time = time.time()
         if current_time - self.last_update >= 30:

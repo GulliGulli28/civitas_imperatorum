@@ -20,9 +20,7 @@ class Logic_main:
 
     map_build = mapBuilding()
     map_char = mapCharacter()
-    drhouse = House(1, 2, 1, 1, 1, 1)
-    drhouse.fire_risk = 0.01
-    Percy_Weasley = Prefet(1, 1, (0, 1))
+
     for i in range(0, 40):
         road = Road(0, i)
         map_build.add_build(road)
@@ -56,11 +54,7 @@ class Logic_main:
     map_build.add_build(road)
     migr = Migrant(0, 20, (39, 21))
     map_char.add_character(migr)
-    false = True
-    while false:
-        drhouse.risque_feu()
-        drhouse.update_risk()
-        print(drhouse.is_on_fire)
+    while True:
         for char in map_char.list:
             if isinstance(char, Migrant):
                 if char.move():
@@ -82,8 +76,7 @@ class Logic_main:
         print(char.positionX, char.positionY)
         print(map_char.list)
         print("Food : ", map_build.map[1][39].stock)
-        Percy_Weasley.checkfire(map_build)
-        time.sleep(1)
+        time.sleep(0.33)
     # while 1:
     #     for build_list in map_build.map:
     #         for build in build_list:
