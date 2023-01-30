@@ -52,7 +52,7 @@ class Logic_main:
     map_build.add_build(grana)
     map_build.add_build(farm)
     map_build.add_build(road)
-    migr = Migrant(0, 20, (39, 21))
+    migr = Migrant(0, 20, (1, 1))
     map_char.add_character(migr)
     while True:
         for char in map_char.list:
@@ -67,8 +67,9 @@ class Logic_main:
                     map_char.remove_character(char)
             elif isinstance(char, Resident):
                 print("Resident X", char.positionX, "Resident Y", char.positionY)
+                char.move(map_build)
             else:
-                char.move()
+                char.move(map_build)
         for i in range(0, 40):
             for j in range(0, 40):
                 if not (map_build.map[i][j] is None):

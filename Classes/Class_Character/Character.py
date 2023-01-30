@@ -49,7 +49,7 @@ class Character(ABC):
         (x, y) = chosen_direction
         self.positionX += x
         self.positionY += y
-        self.direction = (-x, -y)  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move
+        self.direction = chosen_direction  # on assigne l'inverse car le personnage avance et on doit supprimer dans le move
         # l'ancienne position
 
     def update_health(self, newHealth):
