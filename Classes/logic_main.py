@@ -36,14 +36,14 @@ class Logic_main:
         map_build.add_build(road)
     print(map_build.map)
     print("Voici le graph\n", map_build.graph)
-    house = House(1, 1, 1, 1, 1, 1)
+    house = House(1, 1, 1)
     map_build.add_build(house)
     road = Road(40, 45)
-    house = House(39, 21, 1, 1, 1, 1)
+    house = House(39, 21, 1)
     map_build.add_build(road)
     map_build.add_build(house)
-    farm = Farm("wheat", 1, 6, 3, 1, 1, (0, 6))
-    grana = Granary(1, 39, 1, 1, 1, (41, 6), (0, 39))
+    farm = Farm("wheat", 1, 6, 3, 1, 1, 1)
+    grana = Granary(1, 39, 1, 1, 1, 1)
     for i in range(0, 40):
         for j in range(0, 40):
             if not (map_build.map[i][j] is None):

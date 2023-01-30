@@ -1,5 +1,4 @@
 from Classes.Class_Character.Character import Character
-from Classes.Class_Character.mapCharacter import mapCharacter
 
 
 class Delivery(Character):

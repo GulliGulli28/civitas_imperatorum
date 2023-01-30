@@ -39,7 +39,7 @@ class mapBuilding:
         for map in self.map:
             for building in map:
                 if building is not None:
-                    building.check_update()
+                    building.check_update(self, map)
 
     def add_build(self, new_build):
         road_near = False

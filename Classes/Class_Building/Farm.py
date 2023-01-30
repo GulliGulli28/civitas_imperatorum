@@ -9,6 +9,7 @@ class Farm(Building):
     type_crop = None  # type de culture (blé, raisin, etc)
 
     def __init__(self, type_crop, positionX, positionY, size, capacity, price, idi):
+        super().__init__("farm", positionX, positionY, size, capacity, price, idi)
         self.type_crop = type_crop
         self.last_production_time = time.time()
         self.productivity = 50

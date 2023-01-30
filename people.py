@@ -17,7 +17,13 @@ class people:
                     dest = (building.positionX ,building.positionY)
                     print((str)(building.positionX) + " " + (str)(building.positionY))
                     self.mapCharacter.new_character("migrant",25,50,dest)
-        self.mapBuilding.update()
+        for map in self.mapBuilding.map:
+            for building in map:
+                if building is not None:
+                    mapCharacter=self.mapCharacter
+                    mapBuilding=self.mapBuilding
+                    building.check_update(mapCharacter, mapBuilding)
+
         self.mapCharacter.update(self.mapBuilding)
         
     def draw(self, screen, camera):
