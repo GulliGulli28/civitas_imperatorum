@@ -81,7 +81,6 @@ class mapBuilding:
         if isinstance(new_build, Road):
             pos = (new_build.positionX, new_build.positionY)
             self.update_graph(pos)
-<<<<<<< HEAD
         elif isinstance(new_build, House):
             # game.add_resident(5)
             pass
@@ -89,8 +88,6 @@ class mapBuilding:
         type = type_of_building(name)
         new_build = factory(type,positionX,positionY,1)
         self.add_build(new_build)
-=======
->>>>>>> Quentin/Guillaume
 
     def remove_build(self,positionX,positionY):
         build = self.map[positionX][positionY]
@@ -282,7 +279,6 @@ class mapBuilding:
     # path = dijkstra(graph, start, end)
     # print(f'Le chemin le plus court entre {start} et {end} est {path}')
 
-<<<<<<< HEAD
 
 def type_of_building(name):
     match name:
@@ -339,7 +335,6 @@ for i in range(40):
 print(truc.map)
 print(truc.graph)
 '''
-=======
 # truc = mapBuilding()
 # road1 = (0, 0)
 # road2 = (0, 0)
@@ -356,4 +351,3 @@ print(truc.graph)
 # print(truc.graph)
 # path = truc.dijkstra(truc.graph, road1, road2)
 # truc.contruct_entire_path(path)
->>>>>>> Quentin/Guillaume
