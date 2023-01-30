@@ -73,6 +73,7 @@ class Building(ABC):  # hérite de ABC
         if current_time - self.last_update >= 30:
             self.last_update = current_time
             self.update_risk()
+            self.risque_feu()
 
     def update_level(self, level):
         self.level += level
